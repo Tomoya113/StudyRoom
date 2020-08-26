@@ -4,18 +4,16 @@ HackU2020 YAKITORI.rbのリポジトリです。
 ```
 // イメージのビルド
 $ docker-compose build
+(毎回はいらないかも)
 
 // コンテナの起動
 $ docker-compose up -d
 
+// ログを見たい時
+$ docker-compose logs -f app
+
 // コンテナに入る
 $ docker-compose exec app sh
-
-// パッケージのインストール
-$ yarn install
-
-// サーバーの起動
-$ yarn serve
 ```
 # 各ページについて
 ## HOMEページ（/）
