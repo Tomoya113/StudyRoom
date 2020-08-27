@@ -1,4 +1,4 @@
-import firebase from 'firebase'
+import firebase from 'firebase';
 
 export default {
   state: {
@@ -6,17 +6,26 @@ export default {
   },
   mutations: {
     setLoginUser(state, user) {
-      state.login_user = user
+      state.login_user = user;
+    },
+    deleteLoginUser(state) {
+      state.login_user = null;
     },
   },
   actions: {
     setLoginUser({ commit }, user) {
-      commit('setLoginUser', user)
+      commit('setLoginUser', user);
+    },
+    deleteLoginUser({ commit }) {
+      commit('deleteLoginUser');
+    },
+    logout() {
+      firebase.auth().signOut();
     },
     login() {
-      const google_auth_provider = new firebase.auth.GoogleAuthProvider()
-      firebase.auth().signInWithRedirect(google_auth_provider)
+      const google_auth_provider = new firebase.auth.GoogleAuthProvider();
+      firebase.auth().signInWithRedirect(google_auth_provider);
     },
   },
   modules: {},
-}
+};

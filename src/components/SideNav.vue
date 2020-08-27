@@ -17,12 +17,20 @@
             <v-list-item-title>{{ menu.title }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+        <v-list-item @click="logout" v-if="$store.state.auth.login_user">
+          <v-list-item-icon>
+            <v-icon>mdi-logout</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>Logout</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
 
-    <v-content>
+    <v-main>
       <router-view />
-    </v-content>
+    </v-main>
 
     <v-footer app>
       MADE BY YAKITORI.rb
@@ -32,6 +40,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 export default {
   name: 'App',
   data: () => ({
@@ -39,8 +49,10 @@ export default {
       { title: 'Home', icon: 'mdi-home', url: '/' },
       { title: 'Study Room', icon: 'mdi-apps', url: '/studyrooms' },
       { title: 'About', icon: 'mdi-information-variant', url: '/about' },
-      { title: 'Logout', icon: 'mdi-logout', url: '/logout' }
-    ]
-  })
-}
+    ],
+  }),
+  methods: {
+    ...mapActions(['logout']),
+  },
+};
 </script>

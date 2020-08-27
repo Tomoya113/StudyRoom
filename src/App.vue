@@ -6,10 +6,10 @@
 </template>
 
 <script>
-import firebase from 'firebase'
-import SideNav from './components/SideNav'
-import RoomSideNav from './components/RoomSideNav'
-import { mapActions } from 'vuex'
+import firebase from 'firebase';
+import SideNav from './components/SideNav';
+import RoomSideNav from './components/RoomSideNav';
+import { mapActions } from 'vuex';
 
 export default {
   name: 'App',
@@ -21,15 +21,17 @@ export default {
   created() {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        this.setLoginUser(user)
+        this.setLoginUser(user);
+      } else {
+        this.deleteLoginUser();
       }
-    })
+    });
   },
   data: () => ({
     //
   }),
   methods: {
-    ...mapActions(['setLoginUser']),
+    ...mapActions(['setLoginUser', 'deleteLoginUser']),
   },
-}
+};
 </script>
