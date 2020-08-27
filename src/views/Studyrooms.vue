@@ -36,7 +36,7 @@
               :lock="studyroom.lock"
               :password="studyroom.password"
             ></EnterRoomDialog>
-            <v-btn rounded color="primary" class="enter-btn" v-else>入室する</v-btn>
+            <v-btn :href="`/studyroom/${studyroom.roomId}`" rounded color="primary" class="enter-btn" v-else>入室する</v-btn>
           </v-layout>
         </v-card-actions>
       </v-card>
