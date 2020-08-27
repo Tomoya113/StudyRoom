@@ -1,26 +1,29 @@
 <template>
   <v-app>
-    <SideNav />
+    <RoomSideNav v-if="this.$route.name == 'Studyroom'" />
+    <SideNav v-else />
   </v-app>
 </template>
 
 <script>
-import firebase from 'firebase';
-import SideNav from './components/SideNav';
-import { mapActions } from 'vuex';
+import firebase from 'firebase'
+import SideNav from './components/SideNav'
+import RoomSideNav from './components/RoomSideNav'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'App',
 
   components: {
     SideNav,
+    RoomSideNav,
   },
   created() {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        this.setLoginUser(user);
+        this.setLoginUser(user)
       }
-    });
+    })
   },
   data: () => ({
     //
@@ -28,5 +31,5 @@ export default {
   methods: {
     ...mapActions(['setLoginUser']),
   },
-};
+}
 </script>
