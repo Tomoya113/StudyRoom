@@ -5,7 +5,9 @@
 </template>
 
 <script>
-import SideNav from './components/SideNav'
+import firebase from 'firebase';
+import SideNav from './components/SideNav';
+import { mapActions } from 'vuex';
 
 export default {
   name: 'App',
@@ -13,9 +15,18 @@ export default {
   components: {
     SideNav,
   },
-
+  created() {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        this.setLoginUser(user);
+      }
+    });
+  },
   data: () => ({
     //
   }),
-}
+  methods: {
+    ...mapActions(['setLoginUser']),
+  },
+};
 </script>
