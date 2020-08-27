@@ -1,3 +1,5 @@
+import router from '../router';
+
 export default {
   // NOTE: stateのD付きはダイアログ制御用
   state: {
@@ -20,11 +22,15 @@ export default {
     changeNameD({ commit }) {
       commit('changeNameD');
     },
-    changelockD({ commit }) {
+    changeLockD({ commit }) {
       commit('changeLockD');
     },
-    changeroomoutD({ commit }) {
+    changeRoomoutD({ commit }) {
       commit('changeRoomoutD');
+    },
+    roomout({ commit }) {
+      commit('changeRoomoutD');
+      router.push({ name: 'Studyrooms' });
     },
   },
 };

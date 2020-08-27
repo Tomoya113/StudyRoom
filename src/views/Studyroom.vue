@@ -9,10 +9,49 @@
     <v-btn v-else @click="join" rounded color="primary">Join the room</v-btn>
     <p class="font-weight-medium">{{ logMessage }}</p>
 
-    <!-- 合言葉を設定するダイアログを追加 -->
+    <!-- 合言葉（パスワード）を変更を設定するダイアログ -->
     <v-dialog v-model="$store.state.studyroom.lockD" max-width="500px">
       <v-card>
-        <v-card-title><v-icon size="15">mdi-lock</v-icon>合言葉を設定する</v-card-title>
+        <v-card-title>合言葉を設定</v-card-title>
+        <v-card-text>
+          合言葉を設定すると、合言葉を知っている人のみ入室可能となります。
+          <v-switch v-model="lockSwitch" label="合言葉を設定する"></v-switch>
+          <!-- CHECK: 合言葉入力をrequiredにしてるけど、ロックをしない場合にエラーが起きないか -->
+          <v-text-field v-if="lockSwitch" label="合言葉" required></v-text-field>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="green darken-1" text @click.stop="changeLockD">キャンセル</v-btn>
+          <v-btn color="green darken-1" text @click.stop="changeLockD">決定</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <!-- 名前を変更を設定するダイアログ -->
+    <v-dialog v-model="$store.state.studyroom.nameD" max-width="500px">
+      <v-card>
+        <v-card-title>表示名を変更</v-card-title>
+        <v-card-text>
+          チャットやビデオ画面に表示される表示名を変更することができます。
+          <v-text-field label="表示名" required></v-text-field>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="green darken-1" text @click.stop="changeNameD">キャンセル</v-btn>
+          <v-btn color="green darken-1" text @click.stop="changeNameD">決定</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <!-- 部屋から退出するか確認のダイアログ -->
+    <v-dialog v-model="$store.state.studyroom.roomoutD" max-width="500px">
+      <v-card>
+        <v-card-title>本当に退出しますか？</v-card-title>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="green darken-1" text @click.stop="changeRoomoutD">キャンセル</v-btn>
+          <v-btn color="green darken-1" text @click.stop="roomout">決定</v-btn>
+        </v-card-actions>
       </v-card>
     </v-dialog>
   </div>
@@ -21,10 +60,12 @@
 <script>
 import Peer from 'skyway-js';
 import { APIKEY } from '@/apiKey.js';
+import { mapActions } from 'vuex';
 
 export default {
   data() {
     return {
+      //カメラ用
       peer: null,
       srcObject: null,
       roomId: null,
@@ -33,6 +74,8 @@ export default {
       screens: [],
       isConnected: false,
       room: null,
+      //ダイアログ制御用（合言葉）
+      lockSwitch: false,
     };
   },
   async created() {
@@ -117,9 +160,11 @@ export default {
         track.stop();
       });
     },
+    ...mapActions(['changeNameD', 'changeLockD', 'changeRoomoutD', 'roomout']),
   },
 };
 </script>
+
 <style scoped lang="sass">
 .screen
   display: flex
