@@ -8,20 +8,46 @@
         </v-btn>
       </v-list-item>
       <v-divider />
-      <v-list nav>
-        <v-list-item
-          v-for="menu in menus"
-          :key="menu.title"
-          @click="menu.action"
-        >
-          <v-list-item-icon>
-            <v-icon>{{ menu.icon }}</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title>{{ menu.title }}</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
+      <!-- NOTE: チャット -->
+      <v-list-item @click.stop="">
+        <v-list-item-icon>
+          <v-icon>mdi-message</v-icon>
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title>チャット</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+
+      <!-- TODO: @click.stopでのaction起動をできるようにする→コードがきれいになる -->
+      <!-- NOTE: 表示名を変更 -->
+      <v-list-item @click.stop="changeNameD">
+        <v-list-item-icon>
+          <v-icon>mdi-pencil</v-icon>
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title>表示名を変更</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+
+      <!-- NOTE: 合言葉を設定 -->
+      <v-list-item @click.stop="changeLockD">
+        <v-list-item-icon>
+          <v-icon>mdi-lock</v-icon>
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title>合言葉を設定</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+
+      <!-- NOTE: 退出 -->
+      <v-list-item @click.stop="changeRoomoutD">
+        <v-list-item-icon>
+          <v-icon>mdi-logout</v-icon>
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title>退出</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
     </v-navigation-drawer>
 
     <v-content>
@@ -36,15 +62,15 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 export default {
   name: 'App',
   data: () => ({
-    menus: [
-      { title: 'チャット', icon: 'mdi-message', action: 'chat' },
-      { title: '表示名を変更', icon: 'mdi-pencil', action: 'changeName' },
-      { title: '合言葉を設定', icon: 'mdi-lock', action: 'lock' },
-      { title: '退出', icon: 'mdi-logout', action: 'roomout' },
-    ],
+    //
   }),
-}
+  methods: {
+    ...mapActions(['changeNameD', 'changeLockD', 'changeRoomoutD']),
+  },
+};
 </script>
