@@ -14,6 +14,12 @@ $ docker-compose logs -f app
 
 // コンテナに入る
 $ docker-compose exec app sh
+
+// パッケージのインストール
+$ yarn
+
+// サーバーの起動
+$ yarn serve
 ```
 # 各ページについて
 ## HOMEページ（/）
