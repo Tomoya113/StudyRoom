@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-navigation-drawer app mini-variant="true" expand-on-hover="true">
+    <v-navigation-drawer app mini-variant expand-on-hover>
       <v-list-item>
         <v-list-item-title class="title">Room101</v-list-item-title>
         <v-btn icon>
@@ -9,7 +9,11 @@
       </v-list-item>
       <v-divider />
       <v-list nav>
-        <v-list-item v-for="menu in menus" :key="menu.title" @click="menu.action">
+        <v-list-item
+          v-for="menu in menus"
+          :key="menu.title"
+          @click="menu.action"
+        >
           <v-list-item-icon>
             <v-icon>{{ menu.icon }}</v-icon>
           </v-list-item-icon>
@@ -36,11 +40,11 @@ export default {
   name: 'App',
   data: () => ({
     menus: [
-      { title: 'Home', icon: 'mdi-home', action: '/' },
-      { title: 'Study Room', icon: 'mdi-apps', action: '/studyrooms' },
-      { title: 'About', icon: 'mdi-information-variant', action: '/about' },
-      { title: 'Logout', icon: 'mdi-logout', action: '/logout' }
-    ]
-  })
+      { title: 'チャット', icon: 'mdi-message', action: 'chat' },
+      { title: '表示名を変更', icon: 'mdi-pencil', action: 'changeName' },
+      { title: '合言葉を設定', icon: 'mdi-lock', action: 'lock' },
+      { title: '退出', icon: 'mdi-logout', action: 'roomout' },
+    ],
+  }),
 }
 </script>
