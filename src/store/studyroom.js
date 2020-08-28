@@ -2,6 +2,7 @@ import router from '../router';
 import Peer from 'skyway-js';
 import { APIKEY } from "@/apiKey.js";
 
+// NOTE: 初期化用
 const getDefaultState = () => {
   return {
     // カメラ用
@@ -12,12 +13,15 @@ const getDefaultState = () => {
     screens: [],
     logMessage: null,
     room: null,
+    // テキストチャット
+    messages: [],
     // ダイアログ
     nameDialog: false,
     lockDialog: false,
     roomoutDialog: false,
   };
 }
+
 
 export default {
   state: {
@@ -29,6 +33,8 @@ export default {
     screens: [],
     logMessage: null,
     room: null,
+    // テキストチャット
+    messages: [],
     // ダイアログ
     nameDialog: false,
     lockDialog: false,
@@ -70,12 +76,13 @@ export default {
 
       // roomに入った時
       state.room.once("open", () => {
-        state.logMessage = "You joined this room. \n";
+        console.log('connected')
+        state.logMessage = "You joined this room.\n";
       });
 
       // 他のユーザーが入ってきた時
       state.room.on("peerJoin", (peerId) => {
-        state.logMessage = state.logMessage + `${peerId} joined \n`;
+        state.logMessage = state.logMessage + `${peerId} joined` + "\n";
       });
 
       // 他の人のビデオ情報を取得した時
@@ -85,8 +92,9 @@ export default {
       });
 
       // 他の人からデータが送信されてきた時
-      state.room.on("data", ({ data, src }) => {
-        console.log({ data }, { src });
+      state.room.on("data", ({ data }) => {
+        console.log(data)
+        state.messages.push(data)
       });
 
       // 自分以外のメンバーが退出した時の処理
@@ -101,6 +109,14 @@ export default {
       state.room.once("close", () => {
         console.log("disconnected");
       });
+    },
+    sendMessage(state, { message }) {
+      state.messages.push(message)
+      state.room.send(message);
+    },
+    recieveMessage(state, { message }) {
+      console.log(message);
+      state.message.push(message);
     },
     changeNameD(state) {
       state.nameD = !state.nameDialog;
@@ -127,6 +143,12 @@ export default {
     },
     joinRoom({ commit }, { roomId }) {
       commit("joinRoom", { roomId });
+    },
+    sendMessage({ commit }, { message }) {
+      commit("sendMessage", { message })
+    },
+    recieveMessage({ commit }, { message }) {
+      commit("recieveMessage", { message })
     },
     changeNameDialog({ commit }) {
       commit("changeNameDialog");
