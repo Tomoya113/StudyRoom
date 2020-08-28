@@ -9,6 +9,13 @@
     <v-btn v-else @click="join" rounded color="primary">Join the room</v-btn>
     <p class="font-weight-medium">{{ $store.state.studyroom.logMessage }}</p>
 
+    <div v-for="message in $store.state.studyroom.messages" :key="message.body">
+      <h4>{{ message.name }}</h4>
+      <p>{{ message.body }}</p>
+    </div>
+    <textarea v-model="message" name="message" id="" cols="30" rows="10"></textarea>
+    <button @click="submit">メッセージを送信</button>
+
     <!-- 合言葉（パスワード）を変更を設定するダイアログ -->
     <v-dialog v-model="$store.state.studyroom.lockDialog" max-width="500px">
       <v-card>
@@ -65,6 +72,7 @@ export default {
     return {
       //ダイアログ制御用（合言葉）
       lockSwitch: false,
+      message: "",
     };
   },
   async created() {
@@ -78,6 +86,12 @@ export default {
     join() {
       this.joinRoom({ roomId: this.$route.params.studyroom_id });
     },
+    submit() {
+      if (this.message) {
+        this.sendMessage({ message: { name: this.$store.state.auth.login_user.displayName , body: this.message } })
+        this.message = ""
+      }
+    },
     // ルームを退出する時の処理
     leave() {
       this.room.close();
@@ -87,12 +101,15 @@ export default {
         track.stop();
       });
     },
-    ...mapActions(['setup', 'joinRoom', 'changeNameDialog', 'changeLockDialog', 'changeRoomoutDialog', 'roomout']),
+    ...mapActions(['setup', 'joinRoom', 'sendMessage', 'changeNameDialog', 'changeLockDialog', 'changeRoomoutDialog', 'roomout']),
   },
 };
 </script>
 
 <style scoped lang="sass">
+// 後で消すやつ
 .screen
   display: flex
+textarea
+  border: solid 1px black
 </style>
