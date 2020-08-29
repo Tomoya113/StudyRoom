@@ -46,7 +46,8 @@ export default {
         .getUserMedia({
           audio: true,
           video: true,
-        }).then((stream) => {
+        })
+        .then((stream) => {
           state.localStream = stream;
           state.srcObject = state.localStream;
         })
@@ -66,21 +67,21 @@ export default {
       }
 
       state.isConnected = true;
-      // roomに入出
+      // roomに入室
       state.room = state.peer.joinRoom(`studyRoom-${roomId}`, {
         mode: "sfu",
         stream: state.localStream,
-      })
+      });
 
       // roomに入った時
       state.room.once("open", () => {
         state.logMessage = "You joined this room.\n";
-        state.room.send({ name: displayName, body: 'ルームに入出しました' })
+        state.room.send({ name: displayName, body: "ルームに入室しました" });
       });
 
       // 他のユーザーが入ってきた時
       state.room.on("peerJoin", (peerId) => {
-        console.log('peer joined')
+        console.log("peer joined");
         state.logMessage = state.logMessage + `${peerId} joined` + "\n";
       });
 
@@ -91,8 +92,8 @@ export default {
 
       // 他の人からデータが送信されてきた時
       state.room.on("data", ({ data }) => {
-        console.log({data})
-        state.messages.push(data)
+        console.log({ data });
+        state.messages.push(data);
         console.log(state.messages);
       });
 
@@ -106,16 +107,15 @@ export default {
       state.room.once("close", () => {
         console.log("disconnected");
       });
-
     },
     sendMessage(state, { message }) {
-      console.log('seding message')
-      state.messages.push(message)
+      console.log("seding message");
+      state.messages.push(message);
       state.room.send(message);
     },
     setPassword(state, { password }) {
       // TODO: FireStoreに良い感じにデータを追加する
-      console.log('setPassword', { password });
+      console.log("setPassword", { password });
     },
     recieveMessage(state, { message }) {
       console.log(message);
@@ -131,14 +131,14 @@ export default {
       state.roomoutDialog = !state.roomoutDialog;
     },
     roomout(state) {
-      state.room.close()
+      state.room.close();
       const tracks = state.srcObject.getTracks();
       tracks.forEach((track) => {
         track.stop();
       });
       state = Object.assign(state, getDefaultState());
-      console.log(state)
-    }
+      console.log(state);
+    },
   },
   actions: {
     setup({ commit }) {
@@ -148,13 +148,13 @@ export default {
       commit("joinRoom", { roomId, displayName });
     },
     sendMessage({ commit }, { message }) {
-      commit("sendMessage", { message })
+      commit("sendMessage", { message });
     },
-    setPassword({ commit}, { password }) {
-      commit("setPassword", { password })
+    setPassword({ commit }, { password }) {
+      commit("setPassword", { password });
     },
     recieveMessage({ commit }, { message }) {
-      commit("recieveMessage", { message })
+      commit("recieveMessage", { message });
     },
     changeNameDialog({ commit }) {
       commit("changeNameDialog");
@@ -169,5 +169,15 @@ export default {
       commit("roomout");
       router.push({ name: "Studyrooms" });
     },
+  },
+  getters: {
+    isConnected: (state) => state.isConnected,
+    srcObject: (state) => state.srcObject,
+    screens: (state) => state.screens,
+    logMessage: (state) => state.logMessage,
+    messages: (state) => state.messages,
+    lockDialog: (state) => state.lockDialog,
+    nameDialog: (state) => state.nameDialog,
+    roomoutDialog: (state) => state.roomoutDialog,
   },
 };
