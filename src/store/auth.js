@@ -27,5 +27,8 @@ export default {
       firebase.auth().signInWithRedirect(google_auth_provider);
     },
   },
+  getters: {
+    userName: (state) => (state.login_user ? state.login_user.displayName : ""),
+  },
   modules: {},
 };
