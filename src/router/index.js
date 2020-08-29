@@ -22,6 +22,11 @@ const routes = [
     name: 'Studyroom',
     component: Studyroom,
   },
+  {
+    path: '/user',
+    name: 'User',
+    component: User,
+  },
 ]
 
 const router = new VueRouter({
