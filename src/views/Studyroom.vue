@@ -8,6 +8,7 @@
     <v-btn v-if="$store.state.studyroom.isConnected" @click="changeRoomoutDialog" rounded color="secondary">Leave the room</v-btn>
     <!-- NOTEが取得されるまで押せなくしたほうがいいかも -->
     <v-btn v-else @click="confirm" rounded color="primary">Join the room</v-btn>
+    <v-btn @click="changeLockDialog" rounded color="secondary">合言葉を設定</v-btn>
     <p class="font-weight-medium">{{ $store.state.studyroom.logMessage }}</p>
 
     <h2>チャットログ</h2>
@@ -26,12 +27,12 @@
           合言葉を設定すると、合言葉を知っている人のみ入室可能となります。
           <v-switch v-model="lockSwitch" label="合言葉を設定する"></v-switch>
           <!-- CHECK: 合言葉入力をrequiredにしてるけど、ロックをしない場合にエラーが起きないか -->
-          <v-text-field v-if="lockSwitch" label="合言葉" required></v-text-field>
+          <v-text-field v-model="password" v-if="lockSwitch" label="合言葉" autofocus :disabled="!lockSwitch"></v-text-field>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="green darken-1" text @click.stop="changeLockDialog">キャンセル</v-btn>
-          <v-btn color="green darken-1" text @click.stop="changeLockDialog">決定</v-btn>
+          <v-btn color="green darken-1" text @click.stop="makePrivate">決定</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -76,6 +77,7 @@ export default {
       lockSwitch: false,
       message: "",
       displayName: "",
+      password: "",
     };
   },
   async created() {
@@ -100,10 +102,15 @@ export default {
         this.message = ""
       }
     },
+    makePrivate() {
+      this.changeLockDialog();
+      this.setPassword({ password: this.password });
+    },
     // ルームを退出する時の処理
     leave() {
+      this.roomout()
     },
-    ...mapActions(['setup', 'joinRoom', 'sendMessage', 'changeNameDialog', 'changeLockDialog', 'changeRoomoutDialog', 'roomout']),
+    ...mapActions(['setup', 'joinRoom', 'sendMessage', 'setPassword', 'changeNameDialog', 'changeLockDialog', 'changeRoomoutDialog', 'roomout']),
   },
   computed: {
     ...mapGetters(['userName'])

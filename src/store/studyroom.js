@@ -113,6 +113,10 @@ export default {
       state.messages.push(message)
       state.room.send(message);
     },
+    setPassword(state, { password }) {
+      // TODO: FireStoreに良い感じにデータを追加する
+      console.log('setPassword', { password });
+    },
     recieveMessage(state, { message }) {
       console.log(message);
       state.message.push(message);
@@ -145,6 +149,9 @@ export default {
     },
     sendMessage({ commit }, { message }) {
       commit("sendMessage", { message })
+    },
+    setPassword({ commit}, { password }) {
+      commit("setPassword", { password })
     },
     recieveMessage({ commit }, { message }) {
       commit("recieveMessage", { message })
