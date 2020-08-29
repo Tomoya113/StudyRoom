@@ -6,9 +6,11 @@
       <video width="200px" v-for="screen in $store.state.studyroom.screens" :key="screen.id" @loadeddata="onLoadedData" :srcObject.prop="screen" plyasInline muted></video>
     </div>
     <v-btn v-if="$store.state.studyroom.isConnected" @click="changeRoomoutDialog" rounded color="secondary">Leave the room</v-btn>
-    <v-btn v-else @click="join" rounded color="primary">Join the room</v-btn>
+    <!-- NOTEが取得されるまで押せなくしたほうがいいかも -->
+    <v-btn v-else @click="confirm" rounded color="primary">Join the room</v-btn>
     <p class="font-weight-medium">{{ $store.state.studyroom.logMessage }}</p>
 
+    <h2>チャットログ</h2>
     <div v-for="message in $store.state.studyroom.messages" :key="message.body">
       <h4>{{ message.name }}</h4>
       <p>{{ message.body }}</p>
@@ -40,12 +42,12 @@
         <v-card-title>表示名を変更</v-card-title>
         <v-card-text>
           チャットやビデオ画面に表示される表示名を変更することができます。
-          <v-text-field label="表示名" required></v-text-field>
+          <v-text-field label="表示名" v-model="displayName" required autofocus></v-text-field>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="green darken-1" text @click.stop="changeNameDialog">キャンセル</v-btn>
-          <v-btn color="green darken-1" text @click.stop="changeNameDialog">決定</v-btn>
+          <v-btn color="green darken-1" text @click.stop="join">決定</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -65,7 +67,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   data() {
@@ -73,6 +75,7 @@ export default {
       //ダイアログ制御用（合言葉）
       lockSwitch: false,
       message: "",
+      displayName: "",
     };
   },
   async created() {
@@ -83,26 +86,28 @@ export default {
     onLoadedData(event) {
       event.target.play().catch(console.error);
     },
+    confirm() {
+      this.displayName = this.userName;
+      this.changeNameDialog();
+    },
     join() {
-      this.joinRoom({ roomId: this.$route.params.studyroom_id });
+      this.changeNameDialog();
+      this.joinRoom({ roomId: this.$route.params.studyroom_id, displayName: this.displayName })
     },
     submit() {
       if (this.message) {
-        this.sendMessage({ message: { name: this.$store.state.auth.login_user.displayName , body: this.message } })
+        this.sendMessage({ message: { name: this.displayName , body: this.message } })
         this.message = ""
       }
     },
     // ルームを退出する時の処理
     leave() {
-      this.room.close();
-      const tracks = this.srcObject.getTracks();
-      console.log(tracks);
-      tracks.forEach(track => {
-        track.stop();
-      });
     },
     ...mapActions(['setup', 'joinRoom', 'sendMessage', 'changeNameDialog', 'changeLockDialog', 'changeRoomoutDialog', 'roomout']),
   },
+  computed: {
+    ...mapGetters(['userName'])
+  }
 };
 </script>
 

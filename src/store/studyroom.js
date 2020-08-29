@@ -59,9 +59,7 @@ export default {
 
       state.peer.on("error", console.error);
     },
-    joinRoom(state, { roomId }) {
-      console.log(state.localStream)
-      console.log(state.peer.open)
+    joinRoom(state, { roomId, displayName }) {
       // ロードが終わってなかったらreturn
       if (!state.peer.open) {
         return;
@@ -72,36 +70,35 @@ export default {
       state.room = state.peer.joinRoom(`studyRoom-${roomId}`, {
         mode: "sfu",
         stream: state.localStream,
-      });
+      })
 
       // roomに入った時
       state.room.once("open", () => {
-        console.log('connected')
         state.logMessage = "You joined this room.\n";
+        state.room.send({ name: displayName, body: 'ルームに入出しました' })
       });
 
       // 他のユーザーが入ってきた時
       state.room.on("peerJoin", (peerId) => {
+        console.log('peer joined')
         state.logMessage = state.logMessage + `${peerId} joined` + "\n";
       });
 
       // 他の人のビデオ情報を取得した時
       state.room.on("stream", async (stream) => {
-        console.log(state.srcObject, { stream });
         await state.screens.push(stream);
       });
 
       // 他の人からデータが送信されてきた時
       state.room.on("data", ({ data }) => {
-        console.log(data)
+        console.log({data})
         state.messages.push(data)
+        console.log(state.messages);
       });
 
       // 自分以外のメンバーが退出した時の処理
-      state.room.on("peerLeave", (peerId) => {
-        console.log({ peerId });
+      state.room.on("peerLeave", () => {
         const result = state.screens.findIndex((screen) => screen.peerId);
-        console.log({ result });
         state.screens.splice(result, 1);
       });
 
@@ -109,8 +106,10 @@ export default {
       state.room.once("close", () => {
         console.log("disconnected");
       });
+
     },
     sendMessage(state, { message }) {
+      console.log('seding message')
       state.messages.push(message)
       state.room.send(message);
     },
@@ -118,8 +117,8 @@ export default {
       console.log(message);
       state.message.push(message);
     },
-    changeNameD(state) {
-      state.nameD = !state.nameDialog;
+    changeNameDialog(state) {
+      state.nameDialog = !state.nameDialog;
     },
     changeLockDialog(state) {
       state.lockDialog = !state.lockDialog;
@@ -141,8 +140,8 @@ export default {
     setup({ commit }) {
       commit("setup");
     },
-    joinRoom({ commit }, { roomId }) {
-      commit("joinRoom", { roomId });
+    joinRoom({ commit }, { roomId, displayName }) {
+      commit("joinRoom", { roomId, displayName });
     },
     sendMessage({ commit }, { message }) {
       commit("sendMessage", { message })
