@@ -57,15 +57,17 @@
 </template>
 
 <script>
+import moment from 'moment';
+
 export default {
   data() {
     return {
-      today: '2020-08-29',
+      today: moment(new Date).format('YYYY-MM-DD'),
       focus: '',
       type: 'month',
       events: [],
       tracked: {
-        '2019-01-09': [23, 45, 10],
+        '2020-08-09': [23, 45, 10],
         '2019-01-08': [10],
         '2019-01-07': [0, 78, 5],
         '2019-01-06': [0, 0, 50],
