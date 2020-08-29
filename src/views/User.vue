@@ -10,7 +10,7 @@
          :type="type"
          :now="today"
          :value="today"
-         @change="updateRange"
+         @change="updateCalendar"
        >
         <template v-slot:day="{ present, past, date }">
           <v-row
@@ -65,51 +65,28 @@ export default {
       today: moment(new Date).format('YYYY-MM-DD'),
       focus: '',
       type: 'month',
-      events: [],
-      tracked: {
-        '2020-08-09': [23, 45, 10],
-        '2019-01-08': [10],
-        '2019-01-07': [0, 78, 5],
-        '2019-01-06': [0, 0, 50],
-        '2019-01-05': [0, 10, 23],
-        '2019-01-04': [2, 90],
-        '2019-01-03': [10, 32],
-        '2019-01-02': [80, 10, 10],
-        '2019-01-01': [20, 25, 10],
-      },
+      tracked: [],
       colors: ['#1867c0', '#fb8c00', '#000000'],
-      category: ['Development', 'Meetings', 'Slacking'],
+      category: ['目標達成率'],
     };
   },
   methods: {
-    updateRange ({ start, end }) {
-     // const events = []
-     start = end
-     end = start
+    updateCalendar () {
 
-     //const min = new Date(`${start.date}T00:00:00`)
-     //const max = new Date(`${end.date}T23:59:59`)
-     //const days = (max.getTime() - min.getTime()) / 86400000
-     // const eventCount = this.rnd(days, days + 20)
-     /*
-     for (let i = 0; i < eventCount; i++) {
-       const allDay = this.rnd(0, 3) === 0
-       const firstTimestamp = this.rnd(min.getTime(), max.getTime())
-       const first = new Date(firstTimestamp - (firstTimestamp % 900000))
-       const secondTimestamp = this.rnd(2, allDay ? 288 : 8) * 900000
-       const second = new Date(first.getTime() + secondTimestamp)
-
-       events.push({
-         name: this.names[this.rnd(0, this.names.length - 1)],
-         start: first,
-         end: second,
-         color: this.colors[this.rnd(0, this.colors.length - 1)],
-         timed: !allDay,
-       })
+     // TODO: trackedに下記のような情報を入れる。
+     this.tracked =
+     {
+       '2020-08-09': [23],
+       '2019-08-08': [10],
+       '2019-01-07': [80],
+       '2019-01-06': [100],
+       '2019-01-05': [100],
+       '2019-01-04': [50],
+       '2019-01-03': [10],
+       '2019-01-02': [80],
+       '2019-01-01': [20],
      }
-     */
 
-     // this.events = events
    },
    prev () {
     this.$refs.calendar.prev()
