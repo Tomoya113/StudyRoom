@@ -2,25 +2,29 @@
   <div>
     <h2>This is Studyroom Page</h2>
     <div class="screen">
-      <video v-show="$store.state.studyroom.isConnected" width="200px" @loadeddata="onLoadedData" :srcObject.prop="$store.state.studyroom.srcObject" playsInline muted></video>
-      <video width="200px" v-for="screen in $store.state.studyroom.screens" :key="screen.id" @loadeddata="onLoadedData" :srcObject.prop="screen" plyasInline muted></video>
+      <video v-show="this.isConnected" width="200px" @loadeddata="onLoadedData" :srcObject.prop="this.srcObject" playsInline muted></video>
+      <video width="200px" v-for="screen in this.screens" :key="screen.id" @loadeddata="onLoadedData" :srcObject.prop="screen" plyasInline muted></video>
     </div>
-    <v-btn v-if="$store.state.studyroom.isConnected" @click="changeRoomoutDialog" rounded color="secondary">Leave the room</v-btn>
+    <v-btn v-if="this.isConnected" @click="changeRoomoutDialog" rounded color="secondary">Leave the room</v-btn>
     <!-- NOTEが取得されるまで押せなくしたほうがいいかも -->
     <v-btn v-else @click="confirm" rounded color="primary">Join the room</v-btn>
     <v-btn @click="changeLockDialog" rounded color="secondary">合言葉を設定</v-btn>
-    <p class="font-weight-medium">{{ $store.state.studyroom.logMessage }}</p>
+    <p class="font-weight-medium">{{ this.logMessage }}</p>
 
-    <h2>チャットログ</h2>
-    <div v-for="message in $store.state.studyroom.messages" :key="message.body">
-      <h4>{{ message.name }}</h4>
-      <p>{{ message.body }}</p>
+    <div v-show="this.isConnected">
+      <h2>チャットログ</h2>
+      <div v-for="message in this.messages" :key="message.body">
+        <h4>{{ message.name }}</h4>
+        <p>{{ message.body }}</p>
+      </div>
+      <div>
+        <textarea v-model="message" name="message" id="" cols="30" rows="10"></textarea>
+        <button @click="submit">メッセージを送信</button>
+      </div>
     </div>
-    <textarea v-model="message" name="message" id="" cols="30" rows="10"></textarea>
-    <button @click="submit">メッセージを送信</button>
 
     <!-- 合言葉（パスワード）を変更を設定するダイアログ -->
-    <v-dialog v-model="$store.state.studyroom.lockDialog" max-width="500px">
+    <v-dialog v-model="this.lockDialog" max-width="500px">
       <v-card>
         <v-card-title>合言葉を設定</v-card-title>
         <v-card-text>
@@ -38,7 +42,7 @@
     </v-dialog>
 
     <!-- 名前を変更を設定するダイアログ -->
-    <v-dialog v-model="$store.state.studyroom.nameDialog" max-width="500px">
+    <v-dialog v-model="this.nameDialog" max-width="500px">
       <v-card>
         <v-card-title>表示名を変更</v-card-title>
         <v-card-text>
@@ -54,7 +58,7 @@
     </v-dialog>
 
     <!-- 部屋から退出するか確認のダイアログ -->
-    <v-dialog v-model="$store.state.studyroom.roomoutDialog" max-width="500px">
+    <v-dialog v-model="this.roomoutDialog" max-width="500px">
       <v-card>
         <v-card-title>本当に退出しますか？</v-card-title>
         <v-card-actions>
@@ -113,7 +117,7 @@ export default {
     ...mapActions(['setup', 'joinRoom', 'sendMessage', 'setPassword', 'changeNameDialog', 'changeLockDialog', 'changeRoomoutDialog', 'roomout']),
   },
   computed: {
-    ...mapGetters(['userName'])
+    ...mapGetters(['userName', 'isConnected', 'srcObject', 'screens', 'logMessage', 'messages', 'lockDialog', 'nameDialog', 'roomoutDialog'])
   }
 };
 </script>
