@@ -1,34 +1,41 @@
 <template>
   <v-app>
-    <v-navigation-drawer app mini-variant="true" expand-on-hover="true">
-      <v-list-item>
-        <v-list-item-title class="title">YAKITORI</v-list-item-title>
-        <v-btn icon>
-          <v-icon>mdi-chevron-left</v-icon>
-        </v-btn>
-      </v-list-item>
-      <v-divider />
-      <v-list nav>
-        <v-list-item v-for="menu in menus" :key="menu.title" :to="menu.url">
-          <v-list-item-icon>
-            <v-icon>{{ menu.icon }}</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title>{{ menu.title }}</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item @click="logout" v-if="$store.state.auth.login_user">
-          <v-list-item-icon>
-            <v-icon>mdi-logout</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title>Logout</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
+    <v-app-bar color="accent-4" dense dark>
+      <v-toolbar-title>Study Room</v-toolbar-title>
 
-    <v-main>
+      <v-spacer></v-spacer>
+
+      <v-btn :to="{name: 'UserHome'}" text>ホーム</v-btn>
+      <v-btn :to="{name: 'Studyrooms'}" text>自習室を探す</v-btn>
+      <v-btn :to="{name: 'About'}" text>使い方</v-btn>
+
+      <v-menu left bottom offset-y open-on-hover v-if="$store.state.auth.login_user">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn icon v-bind="attrs" v-on="on">
+            <v-avatar size="36px">
+              <img v-if="photoURL" alt="Avatar" :src="photoURL" />
+              <v-icon v-else :color="message.color">account</v-icon>
+            </v-avatar>
+          </v-btn>
+        </template>
+
+        <v-list>
+          <v-list-item>
+            <v-list-item-title>{{userName}}</v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="logout">
+            <v-list-item-icon>
+              <v-icon>mdi-logout</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>Logout</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+    </v-app-bar>
+
+    <v-main style="height:100%">
       <router-view />
     </v-main>
 
@@ -41,6 +48,7 @@
 
 <script>
 import { mapActions } from 'vuex';
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'App',
@@ -53,6 +61,9 @@ export default {
   }),
   methods: {
     ...mapActions(['logout']),
+  },
+  computed: {
+    ...mapGetters(['userName', 'photoURL']),
   },
 };
 </script>
