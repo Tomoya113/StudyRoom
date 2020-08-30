@@ -4,6 +4,7 @@ export default {
   state: {
     currentDisplayName: null,
     currentDocId: null,
+    studyLog: [],
   },
   mutations: {
     initCurrentUser(state, userDoc) {
@@ -17,17 +18,35 @@ export default {
     },
     updateDisplayName(state, newName) {
       state.currentDisplayName = newName;
+    },
+    setStudyLog(state, log) {
+      console.log(log);
+      state.studyLog = log;
     }
   },
   actions: {
     initCurrentUser({ commit }, user) {
-      var userRef = firebase.firestore().collection('users');
+      var db = firebase.firestore()
+      var userRef = db.collection('users');
       userRef.where('userId', '==', user.uid).get()
         .then( (query) =>  {
           if (query.docs.length == 1 ) {
             query.forEach((doc) => {
               commit('initCurrentUser', doc);
             });
+            var logRef = db.collection('studylog');
+            logRef.where('userId', '==', user.uid).get()
+              .then( (query) =>  {
+                let bufLog = [];
+                query.forEach((doc) => {
+                  console.log(doc.data());
+                  bufLog.push(doc.data());
+                });
+                commit('setStudyLog', bufLog);
+              })
+              .catch(function(error) {
+                console.log(error);
+              });
           } else {
             // Note: 初回ログイン時
             userRef.add( {
