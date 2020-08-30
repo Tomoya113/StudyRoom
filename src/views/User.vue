@@ -69,6 +69,12 @@ export default {
       category: ['目標達成率', '超過時間'],
     };
   },
+  async created() {
+    let bufUserName = this.currentDisplayName;
+    if (bufUserName != '') {
+      this.displayName = bufUserName;
+    }
+  },
   methods: {
     updateCalendar () {
      // Note: 表示月の変更
