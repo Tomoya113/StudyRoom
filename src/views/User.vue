@@ -42,11 +42,17 @@
         </template>
       </v-calendar>
     </v-sheet>
+
+    <!-- debug用ボタン -->
+    <v-btn fab text small color="grey darken-2" @click="updateName">
+      <v-icon small>mdi-chevron-right</v-icon>
+    </v-btn>
   </div>
 </template>
 
 <script>
 import moment from 'moment';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   data() {
@@ -80,7 +86,20 @@ export default {
    next () {
     this.$refs.calendar.next()
    },
+   updateName () {
+     if (this.currentDocId != null) {
+      let bufData = {
+        changeName: 'change',
+        docId: this.currentDocId
+      }
+      this.updateDisplayName(bufData)
+     }
+   },
+   ...mapActions(['updateDisplayName']),
   },
+  computed: {
+    ...mapGetters(['currentDisplayName', 'currentDocId']),
+  }
 };
 </script>
 
