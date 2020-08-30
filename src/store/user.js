@@ -2,13 +2,18 @@ import firebase from 'firebase';
 
 export default {
   state: {
-    current_user: null,
+    currentDisplayName: null,
+    currentDocId: null,
   },
   mutations: {
-    initCurrentUser(state, user) {
-      state.current_user = user;
-      console.log(user.userId);
-      console.log(user.name);
+    initCurrentUser(state, userDoc) {
+      let user = userDoc.data();
+      state.currentDisplayName = user.currentDisplayName;
+      state.currentDocId = userDoc.id;
+    },
+    createUser(state, { user, doc }) {
+      state.currentDisplayName = user.displayName;
+      state.currentDocId = doc.id;
     },
   },
   actions: {
@@ -18,7 +23,20 @@ export default {
         .then( (query) =>  {
           if (query.docs.length == 1 ) {
             query.forEach((doc) => {
-              commit('initCurrentUser', doc.data());
+              commit('initCurrentUser', doc);
+            });
+          } else {
+            // Note: 初回ログイン時
+            userRef.add( {
+              name: user.displayName,
+              currentDisplayName: user.displayName,
+              userId: user.uid
+            })
+            .then( (doc) => {
+              commit('createUser', { user,  doc });
+            })
+            .catch(function(error) {
+              console.log(error);
             });
           }
         })
