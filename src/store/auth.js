@@ -28,6 +28,7 @@ export default {
     },
   },
   getters: {
+    userId: (state) => (state.login_user ? state.login_user.uid : ''),
     userName: (state) => (state.login_user ? state.login_user.displayName : ''),
     photoURL: (state) => (state.login_user ? state.login_user.photoURL : ''),
   },
