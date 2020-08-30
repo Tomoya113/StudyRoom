@@ -26,7 +26,7 @@
           <v-list-item @click="navigatioToUserPage">
             <v-list-item-title>{{userName}}</v-list-item-title>
           </v-list-item>
-          <v-list-item @click="logout">
+          <v-list-item @click="onLogout">
             <v-list-item-icon>
               <v-icon>mdi-logout</v-icon>
             </v-list-item-icon>
@@ -66,6 +66,10 @@ export default {
     ...mapActions(['logout']),
     navigatioToUserPage() {
       this.$router.push({path: '/user'})
+    },
+    onLogout() {
+      this.logout()
+      this.$router.push({path: '/'})
     },
   },
   computed: {
