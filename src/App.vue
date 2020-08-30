@@ -10,7 +10,6 @@ import firebase from 'firebase';
 import SideNav from './components/SideNav';
 import RoomSideNav from './components/RoomSideNav';
 import { mapActions } from 'vuex';
-import moment from 'moment'
 
 export default {
   name: 'App',
