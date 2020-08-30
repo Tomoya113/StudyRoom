@@ -5,7 +5,7 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn :to="{name: 'UserHome'}" text>ホーム</v-btn>
+      <v-btn :to="{name: 'Home'}" text>ホーム</v-btn>
       <v-btn :to="{name: 'Studyrooms'}" text>自習室を探す</v-btn>
       <v-btn :to="{name: 'About'}" text>使い方</v-btn>
 
