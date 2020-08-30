@@ -1,9 +1,8 @@
 <template>
   <div>
-    <h1>User</h1>
-
-    <!-- テンプレカレンダータイトル -->
+    <!-- カレンダータイトル -->
     <div class="calendar_top">
+      <h1 class="display-1" style="margin:30px">勉強の記録</h1>
       <v-btn fab text small color="grey darken-2" @click="prev">
         <v-icon small>mdi-chevron-left</v-icon>
       </v-btn>
@@ -63,20 +62,15 @@ export default {
   },
   methods: {
     updateCalendar () {
+     // Note: 表示月の変更
      this.calendar_title = this.$refs.calendar.title
 
      // TODO: trackedに下記のような情報を入れる。
      this.tracked =
      {
        '2020-08-09': [23,30],
-       '2019-08-08': [10],
-       '2019-01-07': [80],
-       '2019-01-06': [100],
-       '2019-01-05': [100],
-       '2019-01-04': [50],
-       '2019-01-03': [10],
-       '2019-01-02': [80],
-       '2019-01-01': [20],
+       '2020-08-08': [10],
+       '2020-07-08': [10],
      }
 
    },
@@ -93,4 +87,5 @@ export default {
 <style scoped lang="sass">
 .calendar_top
   display: flex
+  align-items: center
 </style>
