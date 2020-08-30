@@ -1,6 +1,18 @@
 <template>
   <div>
     <h1>User</h1>
+
+    <!-- テンプレカレンダータイトル -->
+    <div class="calendar_top">
+      <v-btn fab text small color="grey darken-2" @click="prev">
+        <v-icon small>mdi-chevron-left</v-icon>
+      </v-btn>
+      <v-btn fab text small color="grey darken-2" @click="next">
+        <v-icon small>mdi-chevron-right</v-icon>
+      </v-btn>
+      <h2>{{calendar_title}}</h2>
+    </div>
+
     <!-- calendar -->
     <v-sheet height="500">
         <v-calendar
@@ -31,28 +43,6 @@
         </template>
       </v-calendar>
     </v-sheet>
-
-    <!-- button -->
-    <v-btn
-      fab
-      small
-      absolute
-      left
-      color="primary"
-      @click="prev"
-    >
-      <v-icon dark>mdi-chevron-left</v-icon>
-    </v-btn>
-    <v-btn
-      fab
-      small
-      absolute
-      right
-      color="primary"
-      @click="next"
-    >
-      <v-icon dark>mdi-chevron-right</v-icon>
-    </v-btn>
   </div>
 </template>
 
@@ -62,21 +52,23 @@ import moment from 'moment';
 export default {
   data() {
     return {
+      calendar_title: '',
       today: moment(new Date).format('YYYY-MM-DD'),
       focus: '',
       type: 'month',
       tracked: [],
-      colors: ['#1867c0', '#fb8c00', '#000000'],
-      category: ['目標達成率'],
+      colors: ['#1867c0', '#fb8c00'],
+      category: ['目標達成率', '超過時間'],
     };
   },
   methods: {
     updateCalendar () {
+     this.calendar_title = this.$refs.calendar.title
 
      // TODO: trackedに下記のような情報を入れる。
      this.tracked =
      {
-       '2020-08-09': [23],
+       '2020-08-09': [23,30],
        '2019-08-08': [10],
        '2019-01-07': [80],
        '2019-01-06': [100],
@@ -99,4 +91,6 @@ export default {
 </script>
 
 <style scoped lang="sass">
+.calendar_top
+  display: flex
 </style>
