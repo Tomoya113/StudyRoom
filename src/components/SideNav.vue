@@ -9,9 +9,12 @@
       <v-btn :to="{name: 'Studyrooms'}" text>自習室を探す</v-btn>
       <v-btn :to="{name: 'About'}" text>使い方</v-btn>
 
-      <v-menu left bottom offset-y open-on-hover v-if="$store.state.auth.login_user">
+      <v-menu
+        left bottom offset-y open-on-hover
+        v-if="$store.state.auth.login_user"
+      >
         <template v-slot:activator="{ on, attrs }">
-          <v-btn icon v-bind="attrs" v-on="on">
+          <v-btn icon v-bind="attrs" v-on="on" @click="navigatioToUserPage">
             <v-avatar size="36px">
               <img v-if="photoURL" alt="Avatar" :src="photoURL" />
               <v-icon v-else :color="message.color">account</v-icon>
@@ -20,7 +23,7 @@
         </template>
 
         <v-list>
-          <v-list-item>
+          <v-list-item @click="navigatioToUserPage">
             <v-list-item-title>{{userName}}</v-list-item-title>
           </v-list-item>
           <v-list-item @click="logout">
@@ -61,6 +64,9 @@ export default {
   }),
   methods: {
     ...mapActions(['logout']),
+    navigatioToUserPage() {
+      this.$router.push({path: '/user'})
+    },
   },
   computed: {
     ...mapGetters(['userName', 'photoURL']),
