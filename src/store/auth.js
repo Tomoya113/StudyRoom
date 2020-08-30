@@ -28,8 +28,8 @@ export default {
     },
   },
   getters: {
-    userName: state => (state.login_user ? state.login_user.displayName : ''),
-    photoURL: state => (state.login_user ? state.login_user.photoURL : ''),
+    userName: (state) => (state.login_user ? state.login_user.displayName : ''),
+    photoURL: (state) => (state.login_user ? state.login_user.photoURL : ''),
   },
   modules: {},
 };
