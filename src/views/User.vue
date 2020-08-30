@@ -94,6 +94,14 @@ export default {
     this.$refs.calendar.next()
    },
    updateName () {
+     // TODO: デバッグ用コードの削除
+     let bufDebugData = {
+       day: moment(new Date).format('YYYY-MM-DD'),
+       time: 100,
+       userId: this.userId
+     }
+     this.addStudyLog(bufDebugData)
+
      // TODO: this.displayNameのvalidationチェック
      if (this.currentDocId != null) {
       let bufData = {
@@ -103,10 +111,10 @@ export default {
       this.updateDisplayName(bufData)
      }
    },
-   ...mapActions(['updateDisplayName']),
+   ...mapActions(['updateDisplayName', 'addStudyLog']),
   },
   computed: {
-    ...mapGetters(['currentDisplayName', 'currentDocId']),
+    ...mapGetters(['currentDisplayName', 'currentDocId', 'userId']),
   },
   watch:{
     currentDisplayName:function(newValue,oldValue){
