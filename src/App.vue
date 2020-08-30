@@ -10,7 +10,6 @@ import firebase from 'firebase';
 import SideNav from './components/SideNav';
 import RoomSideNav from './components/RoomSideNav';
 import { mapActions } from 'vuex';
-import moment from 'moment'
 
 export default {
   name: 'App',
@@ -23,6 +22,7 @@ export default {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         this.setLoginUser(user);
+        this.initCurrentUser(user);
       } else {
         this.deleteLoginUser();
       }
@@ -32,7 +32,7 @@ export default {
     //
   }),
   methods: {
-    ...mapActions(['setLoginUser', 'deleteLoginUser']),
+    ...mapActions(['setLoginUser', 'deleteLoginUser', 'initCurrentUser']),
   },
 };
 </script>
