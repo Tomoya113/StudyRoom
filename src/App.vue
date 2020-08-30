@@ -23,6 +23,7 @@ export default {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         this.setLoginUser(user)
+        this.initCurrentUser(user)
       } else {
         this.deleteLoginUser()
       }
@@ -32,7 +33,7 @@ export default {
     //
   }),
   methods: {
-    ...mapActions(['setLoginUser', 'deleteLoginUser']),
+    ...mapActions(['setLoginUser', 'deleteLoginUser', 'initCurrentUser']),
   },
   computed: {
     ...mapGetters(['userName', 'photoURL']),

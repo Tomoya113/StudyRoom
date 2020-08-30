@@ -42,15 +42,24 @@
         </template>
       </v-calendar>
     </v-sheet>
+
+    <!-- currentDisplayName変更用debug -->
+    <div>
+      <h3>自習室表示名</h3>
+      <input v-model="displayName" placeholder="表示名">
+      <v-btn color="info" @click="updateName">表示名変更</v-btn>
+    </div>
   </div>
 </template>
 
 <script>
 import moment from 'moment';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   data() {
     return {
+      displayName: '',
       calendar_title: '',
       today: moment(new Date).format('YYYY-MM-DD'),
       focus: '',
@@ -64,7 +73,6 @@ export default {
     updateCalendar () {
      // Note: 表示月の変更
      this.calendar_title = this.$refs.calendar.title
-
      // TODO: trackedに下記のような情報を入れる。
      this.tracked =
      {
@@ -72,7 +80,6 @@ export default {
        '2020-08-08': [10],
        '2020-07-08': [10],
      }
-
    },
    prev () {
     this.$refs.calendar.prev()
@@ -80,6 +87,28 @@ export default {
    next () {
     this.$refs.calendar.next()
    },
+   updateName () {
+     // TODO: this.displayNameのvalidationチェック
+     if (this.currentDocId != null) {
+      let bufData = {
+        changeName: this.displayName,
+        docId: this.currentDocId
+      }
+      this.updateDisplayName(bufData)
+     }
+   },
+   ...mapActions(['updateDisplayName']),
+  },
+  computed: {
+    ...mapGetters(['currentDisplayName', 'currentDocId']),
+  },
+  watch:{
+    currentDisplayName:function(newValue,oldValue){
+      if (this.displayName =='') {
+        console.log("new: %s, old: %s",newValue,oldValue)
+        this.displayName = newValue
+      }
+    }
   },
 };
 </script>
