@@ -46,7 +46,8 @@ export default {
         .getUserMedia({
           audio: true,
           video: true,
-        }).then((stream) => {
+        })
+        .then((stream) => {
           state.localStream = stream;
           state.srcObject = state.localStream;
         })
@@ -59,16 +60,14 @@ export default {
 
       state.peer.on("error", console.error);
     },
-    joinRoom(state, { roomId }) {
-      console.log(state.localStream)
-      console.log(state.peer.open)
+    joinRoom(state, { roomId, displayName }) {
       // ロードが終わってなかったらreturn
       if (!state.peer.open) {
         return;
       }
 
       state.isConnected = true;
-      // roomに入出
+      // roomに入室
       state.room = state.peer.joinRoom(`studyRoom-${roomId}`, {
         mode: "sfu",
         stream: state.localStream,
@@ -76,32 +75,31 @@ export default {
 
       // roomに入った時
       state.room.once("open", () => {
-        console.log('connected')
         state.logMessage = "You joined this room.\n";
+        state.room.send({ name: displayName, body: "ルームに入室しました" });
       });
 
       // 他のユーザーが入ってきた時
       state.room.on("peerJoin", (peerId) => {
+        console.log("peer joined");
         state.logMessage = state.logMessage + `${peerId} joined` + "\n";
       });
 
       // 他の人のビデオ情報を取得した時
       state.room.on("stream", async (stream) => {
-        console.log(state.srcObject, { stream });
         await state.screens.push(stream);
       });
 
       // 他の人からデータが送信されてきた時
       state.room.on("data", ({ data }) => {
-        console.log(data)
-        state.messages.push(data)
+        console.log({ data });
+        state.messages.push(data);
+        console.log(state.messages);
       });
 
       // 自分以外のメンバーが退出した時の処理
-      state.room.on("peerLeave", (peerId) => {
-        console.log({ peerId });
+      state.room.on("peerLeave", () => {
         const result = state.screens.findIndex((screen) => screen.peerId);
-        console.log({ result });
         state.screens.splice(result, 1);
       });
 
@@ -111,15 +109,20 @@ export default {
       });
     },
     sendMessage(state, { message }) {
-      state.messages.push(message)
+      console.log("seding message");
+      state.messages.push(message);
       state.room.send(message);
+    },
+    setPassword(state, { password }) {
+      // TODO: FireStoreに良い感じにデータを追加する
+      console.log("setPassword", { password });
     },
     recieveMessage(state, { message }) {
       console.log(message);
       state.message.push(message);
     },
-    changeNameD(state) {
-      state.nameD = !state.nameDialog;
+    changeNameDialog(state) {
+      state.nameDialog = !state.nameDialog;
     },
     changeLockDialog(state) {
       state.lockDialog = !state.lockDialog;
@@ -128,27 +131,30 @@ export default {
       state.roomoutDialog = !state.roomoutDialog;
     },
     roomout(state) {
-      state.room.close()
+      state.room.close();
       const tracks = state.srcObject.getTracks();
       tracks.forEach((track) => {
         track.stop();
       });
       state = Object.assign(state, getDefaultState());
-      console.log(state)
-    }
+      console.log(state);
+    },
   },
   actions: {
     setup({ commit }) {
       commit("setup");
     },
-    joinRoom({ commit }, { roomId }) {
-      commit("joinRoom", { roomId });
+    joinRoom({ commit }, { roomId, displayName }) {
+      commit("joinRoom", { roomId, displayName });
     },
     sendMessage({ commit }, { message }) {
-      commit("sendMessage", { message })
+      commit("sendMessage", { message });
+    },
+    setPassword({ commit }, { password }) {
+      commit("setPassword", { password });
     },
     recieveMessage({ commit }, { message }) {
-      commit("recieveMessage", { message })
+      commit("recieveMessage", { message });
     },
     changeNameDialog({ commit }) {
       commit("changeNameDialog");
@@ -163,5 +169,15 @@ export default {
       commit("roomout");
       router.push({ name: "Studyrooms" });
     },
+  },
+  getters: {
+    isConnected: (state) => state.isConnected,
+    srcObject: (state) => state.srcObject,
+    screens: (state) => state.screens,
+    logMessage: (state) => state.logMessage,
+    messages: (state) => state.messages,
+    lockDialog: (state) => state.lockDialog,
+    nameDialog: (state) => state.nameDialog,
+    roomoutDialog: (state) => state.roomoutDialog,
   },
 };
