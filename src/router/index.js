@@ -28,6 +28,10 @@ const routes = [
     name: 'User',
     component: User,
   },
+  {
+    path: '/about',
+    name: 'About',
+  },
 ]
 
 const router = new VueRouter({
