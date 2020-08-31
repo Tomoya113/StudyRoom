@@ -55,6 +55,7 @@
             </v-avatar>
             <h4>{{ message.name }}</h4>
           </div>
+          <p>id: {{ message.id }}</p>
           <p>{{ message.body }}</p>
         </div>
         <div class="d-flex align-center text-form">
@@ -156,7 +157,7 @@ export default {
     },
     submit () {
       if (this.message) {
-        this.sendMessage({ message: { name: this.displayName, photoURL: this.photoURL,  body: this.message } })
+        this.sendMessage({ message: { id: this.userId, name: this.displayName, photoURL: this.photoURL,  body: this.message } })
         this.message = ""
       }
     },
@@ -171,7 +172,7 @@ export default {
     ...mapActions(['setup', 'joinRoom', 'sendMessage', 'setPassword', 'changeNameDialog', 'changeLockDialog', 'changeRoomoutDialog', 'roomout']),
   },
   computed: {
-    ...mapGetters(['userName', 'photoURL', 'isConnected', 'srcObject', 'screens', 'logMessage', 'messages', 'lockDialog', 'nameDialog', 'roomoutDialog'])
+    ...mapGetters(['userId', 'userName', 'photoURL', 'isConnected', 'srcObject', 'screens', 'logMessage', 'messages', 'lockDialog', 'nameDialog', 'roomoutDialog'])
   }
 };
 </script>
