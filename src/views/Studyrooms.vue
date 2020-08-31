@@ -51,11 +51,9 @@ export default {
   components: {
     EnterRoomDialog,
   },
-  data () {
-  },
   created () {
     this.setRoomInformation();
-  },
+    },
   methods: {
     ...mapActions(['setRoomInformation'])
   },

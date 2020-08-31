@@ -1,6 +1,7 @@
 <template>
   <div class="home">
     <v-btn color="info" @click="login" v-if="$store.state.auth.login_user==null">Googleアカウントでログイン</v-btn>
+
   </div>
 </template>
 
