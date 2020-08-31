@@ -1,8 +1,14 @@
 <template>
-  <v-container style="height: 100%;">
+  <div style="width:100%; height: 100%;">
     <v-row v-if="!this.isConnected" no-gutters>
       <v-col cols="12">
-        <v-row class="flex-column" no-gutters align="center" justify="center" style="height: 500px;" >
+        <v-row
+          class="flex-column"
+          no-gutters
+          align="center"
+          justify="center"
+          style="height: 500px;"
+        >
           <h2>This is Studyroom Page</h2>
           <div>
             <v-btn @click="changeLockDialog" rounded color="secondary">合言葉を設定</v-btn>
@@ -15,34 +21,47 @@
 
     <!-- <p class="font-weight-medium">{{ this.logMessage }}</p> -->
     <v-row v-else class="d-flex" style="height: 100%;">
-      <v-col class="d-flex flex-column" cols="8">
+      <v-col class="d-flex flex-column" cols="9">
         <div>
-          <video width="400" v-show="this.isConnected" @loadeddata="onLoadedData" :srcObject.prop="this.srcObject" playsInline muted></video>
-          <video width="400" v-for="screen in this.screens" :key="screen.id" @loadeddata="onLoadedData" :srcObject.prop="screen" plyasInline muted></video>
+          <video
+            width="400"
+            v-show="this.isConnected"
+            @loadeddata="onLoadedData"
+            :srcObject.prop="this.srcObject"
+            playsinline
+            muted
+          ></video>
+          <video
+            width="400"
+            v-for="screen in this.screens"
+            :key="screen.id"
+            @loadeddata="onLoadedData"
+            :srcObject.prop="screen"
+            plyasInline
+            muted
+          ></video>
         </div>
         <div class="d-flex justify-end leave">
-          <v-btn @click="changeRoomoutDialog" rounded color="secondary">Leave the room</v-btn>
+          <v-btn @click="changeRoomoutDialog" rounded color="error">Leave the room</v-btn>
         </div>
       </v-col>
-      <v-col class="d-flex flex-column chat" cols="4">
+      <v-col class="d-flex flex-column chat" cols="3">
         <!-- <div class="d-flex flex-column"> -->
-          <h2>チャットログ</h2>
-          <div v-for="message in this.messages" :key="message.body">
-            <h4>{{ message.name }}</h4>
-            <p>{{ message.body }}</p>
-          </div>
-          <div class="d-flex align-center text-form">
-            <v-text-field
-              label="テキストを入力"
-              solo
-              v-model="message"
-            ></v-text-field>
-            <div style="height: 68px;">
-              <v-btn @click="submit" icon color="indigo">
-                <v-icon x-large>mdi-chevron-right</v-icon>
-            </v-btn>
-            </div>
-          </div>
+        <h2>チャット</h2>
+        <div v-for="message in this.messages" :key="message.body">
+          <h4>{{ message.name }}</h4>
+          <p>{{ message.body }}</p>
+        </div>
+        <div class="d-flex align-center text-form">
+          <v-text-field
+            v-model="message"
+            append-outer-icon="mdi-send"
+            solo
+            label="テキストを入力"
+            type="text"
+            @click:append-outer="submit"
+          ></v-text-field>
+        </div>
         <!-- </div> -->
       </v-col>
     </v-row>
@@ -55,7 +74,13 @@
           合言葉を設定すると、合言葉を知っている人のみ入室可能となります。
           <v-switch v-model="lockSwitch" label="合言葉を設定する"></v-switch>
           <!-- CHECK: 合言葉入力をrequiredにしてるけど、ロックをしない場合にエラーが起きないか -->
-          <v-text-field v-model="password" v-if="lockSwitch" label="合言葉" autofocus :disabled="!lockSwitch"></v-text-field>
+          <v-text-field
+            v-model="password"
+            v-if="lockSwitch"
+            label="合言葉"
+            autofocus
+            :disabled="!lockSwitch"
+          ></v-text-field>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -92,14 +117,14 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </v-container>
+  </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
 
 export default {
-  data() {
+  data () {
     return {
       //ダイアログ制御用（合言葉）
       lockSwitch: false,
@@ -108,34 +133,34 @@ export default {
       password: "",
     };
   },
-  async created() {
+  async created () {
     await this.setup();
   },
   methods: {
     // カメラのロードが終わった時
-    onLoadedData(event) {
+    onLoadedData (event) {
       event.target.play().catch(console.error);
     },
-    confirm() {
+    confirm () {
       this.displayName = this.userName;
       this.changeNameDialog();
     },
-    join() {
+    join () {
       this.changeNameDialog();
       this.joinRoom({ roomId: this.$route.params.studyroom_id, displayName: this.displayName })
     },
-    submit() {
+    submit () {
       if (this.message) {
-        this.sendMessage({ message: { name: this.displayName , body: this.message } })
+        this.sendMessage({ message: { name: this.displayName, body: this.message } })
         this.message = ""
       }
     },
-    makePrivate() {
+    makePrivate () {
       this.changeLockDialog();
       this.setPassword({ password: this.password });
     },
     // ルームを退出する時の処理
-    leave() {
+    leave () {
       this.roomout()
     },
     ...mapActions(['setup', 'joinRoom', 'sendMessage', 'setPassword', 'changeNameDialog', 'changeLockDialog', 'changeRoomoutDialog', 'roomout']),
