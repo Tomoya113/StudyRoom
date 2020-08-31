@@ -49,7 +49,12 @@
         <!-- <div class="d-flex flex-column"> -->
         <h2>チャット</h2>
         <div v-for="message in this.messages" :key="message.body">
-          <h4>{{ message.name }}</h4>
+          <div class="d-flex">
+            <v-avatar size="36px">
+              <img alt="Avatar" :src="photoURL" />
+            </v-avatar>
+            <h4>{{ message.name }}</h4>
+          </div>
           <p>{{ message.body }}</p>
         </div>
         <div class="d-flex align-center text-form">
@@ -147,11 +152,11 @@ export default {
     },
     join () {
       this.changeNameDialog();
-      this.joinRoom({ roomId: this.$route.params.studyroom_id, displayName: this.displayName })
+      this.joinRoom({ roomId: this.$route.params.studyroom_id, photoURL:this.photoURL, displayName: this.displayName })
     },
     submit () {
       if (this.message) {
-        this.sendMessage({ message: { name: this.displayName, body: this.message } })
+        this.sendMessage({ message: { name: this.displayName, photoURL: this.photoURL,  body: this.message } })
         this.message = ""
       }
     },
@@ -166,7 +171,7 @@ export default {
     ...mapActions(['setup', 'joinRoom', 'sendMessage', 'setPassword', 'changeNameDialog', 'changeLockDialog', 'changeRoomoutDialog', 'roomout']),
   },
   computed: {
-    ...mapGetters(['userName', 'isConnected', 'srcObject', 'screens', 'logMessage', 'messages', 'lockDialog', 'nameDialog', 'roomoutDialog'])
+    ...mapGetters(['userName', 'photoURL', 'isConnected', 'srcObject', 'screens', 'logMessage', 'messages', 'lockDialog', 'nameDialog', 'roomoutDialog'])
   }
 };
 </script>

@@ -60,7 +60,7 @@ export default {
 
       state.peer.on("error", console.error);
     },
-    joinRoom(state, { roomId, displayName }) {
+    joinRoom(state, { roomId, displayName, photoURL }) {
       // ロードが終わってなかったらreturn
       if (!state.peer.open) {
         return;
@@ -76,7 +76,7 @@ export default {
       // roomに入った時
       state.room.once("open", () => {
         state.logMessage = "You joined this room.\n";
-        state.room.send({ name: displayName, body: "ルームに入室しました" });
+        state.room.send({ name: displayName, photoURL: photoURL, body: "ルームに入室しました" });
       });
 
       // 他のユーザーが入ってきた時
