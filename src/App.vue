@@ -1,23 +1,22 @@
 <template>
   <v-app>
-    <RoomSideNav v-if="this.$route.name == 'Studyroom'" />
-    <SideNav v-else />
+    <AppBar v-if="this.$route.name !== 'Studyroom'" />
+    <v-content style="height:100%">
+      <router-view />
+    </v-content>
   </v-app>
 </template>
 
 <script>
 import firebase from 'firebase'
-import SideNav from './components/SideNav'
-import RoomSideNav from './components/RoomSideNav'
-import { mapActions } from 'vuex'
-import { mapGetters } from 'vuex'
+import AppBar from './components/AppBar'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'App',
 
   components: {
-    SideNav,
-    RoomSideNav,
+    AppBar,
   },
   created() {
     firebase.auth().onAuthStateChanged((user) => {
