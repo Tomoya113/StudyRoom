@@ -7,8 +7,10 @@
 <script>
 // @ is an alias to /src
 import { mapActions } from 'vuex'
-
 export default {
+  created () {
+
+  },
   methods: {
     ...mapActions(['login']),
   },
