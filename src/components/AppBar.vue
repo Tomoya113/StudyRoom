@@ -4,13 +4,13 @@
       <v-toolbar-title>Study Room</v-toolbar-title>
 
       <v-spacer></v-spacer>
-      <div v-if="$store.state.auth.login_user">
+      <div v-if="this.userId">
         <v-btn :to="{name: 'Home'}" text>ホーム</v-btn>
         <v-btn :to="{name: 'Studyrooms'}" text>自習室を探す</v-btn>
         <v-btn :to="{name: 'About'}" text>使い方</v-btn>
       </div>
 
-      <v-menu left bottom offset-y open-on-hover v-if="$store.state.auth.login_user">
+      <v-menu left bottom offset-y open-on-hover v-if="this.userId">
         <template v-slot:activator="{ on, attrs }">
           <v-btn icon v-bind="attrs" v-on="on" @click="navigatioToUserPage">
             <v-avatar size="36px">
@@ -67,7 +67,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['userName', 'photoURL']),
+    ...mapGetters(['userId', 'userName', 'photoURL']),
   },
 };
 </script>
