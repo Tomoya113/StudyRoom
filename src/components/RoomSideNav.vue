@@ -50,9 +50,9 @@
       </v-list-item>
     </v-navigation-drawer>-->
 
-    <v-content>
+    <!-- <v-content>
       <router-view />
-    </v-content>
+    </v-content> -->
 
     <v-footer app>
       MADE BY YAKITORI.rb

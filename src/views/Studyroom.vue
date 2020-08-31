@@ -24,7 +24,9 @@
       <v-col class="d-flex flex-column" cols="9">
         <div>
           <video
-            width="400"
+            width="400px"
+            height="400px"
+            style="object-fit: cover;"
             v-show="this.isConnected"
             @loadeddata="onLoadedData"
             :srcObject.prop="this.srcObject"
@@ -32,7 +34,9 @@
             muted
           ></video>
           <video
-            width="400"
+            width="400px"
+            height="400px"
+            style="object-fit: cover;"
             v-for="screen in this.screens"
             :key="screen.id"
             @loadeddata="onLoadedData"
@@ -47,55 +51,29 @@
       </v-col>
       <v-col class="d-flex flex-column chat bms_messages" cols="3">
         <h2>チャット</h2>
-        <!-- タイムライン部分③ -->
-        <div id="bms_messages">
-          <div v-for="message in this.messages" :key="message.body">
-            <!-- <div class="bms_message bms_left"> -->
-            <v-avatar size="30px" style="margin-top:auto;float:left">
-              <img alt="Avatar" :src="photoURL" />
-            </v-avatar>
-            <div class="bms_message bms_left">
-              <span style="padding-left:15px;">{{ message.name }}</span>
-              <div class="bms_message_box">
-                <div class="bms_message_content">
-                  <div class="bms_message_text">{{ message.body }}</div>
+        <div class="line-bc">
+          <div
+            v-for="message in this.messages"
+            :key="message.body"
+            :class="userId != message.id? 'balloon6':'mycomment'"
+          >
+            <div v-if="userId != message.id">
+              <v-avatar size="36px" class="faceicon">
+                <img alt="Avatar" :src="photoURL" />
+              </v-avatar>
+              <div class="chatting">
+                <div class="says">
+                  <small>{{ message.name }}</small>
+                  <p>{{ message.body }}</p>
                 </div>
               </div>
             </div>
-            <div class="bms_clear"></div>
-          </div>
 
-          <!--メッセージ２（右側）-->
-          <div class="bms_message bms_right">
-            <div class="bms_message_box">
-              <div class="bms_message_content">
-                <div class="bms_message_text">うん、まあまあいけとるな</div>
-              </div>
+            <div v-else>
+              <p>{{ message.body }}</p>
             </div>
           </div>
-          <div class="bms_clear"></div>
         </div>
-
-        <!-- <div v-for="message in this.messages" :key="message.body">
-          <div class="message">
-            <v-avatar size="30px" style="float:left">
-              <img alt="Avatar" :src="photoURL" />
-            </v-avatar>
-            <div class="message_box">
-              <h4>{{ message.name }}</h4>
-              <div class="message_content">{{ message.body }}</div>
-            </div>
-        </div>-->
-
-        <!-- <div class="d-flex">
-            <v-avatar size="36px">
-              <img alt="Avatar" :src="photoURL" />
-            </v-avatar>
-            <h4>{{ message.name }}</h4>
-          </div>
-        <p>{{ message.body }}</p>-->
-        <!-- </div> -->
-
         <div class="d-flex align-center text-form">
           <v-text-field
             v-model="message"
@@ -106,7 +84,6 @@
             @click:append-outer="submit"
           ></v-text-field>
         </div>
-        <!-- </div> -->
       </v-col>
     </v-row>
 
@@ -195,7 +172,7 @@ export default {
     },
     submit () {
       if (this.message) {
-        this.sendMessage({ message: { name: this.displayName, photoURL: this.photoURL, body: this.message } })
+        this.sendMessage({ message: { id: this.userId, name: this.displayName, photoURL: this.photoURL, body: this.message } })
         this.message = ""
       }
     },
@@ -210,7 +187,7 @@ export default {
     ...mapActions(['setup', 'joinRoom', 'sendMessage', 'setPassword', 'changeNameDialog', 'changeLockDialog', 'changeRoomoutDialog', 'roomout']),
   },
   computed: {
-    ...mapGetters(['userName', 'photoURL', 'isConnected', 'srcObject', 'screens', 'logMessage', 'messages', 'lockDialog', 'nameDialog', 'roomoutDialog'])
+    ...mapGetters(['userId', 'userName', 'photoURL', 'isConnected', 'srcObject', 'screens', 'logMessage', 'messages', 'lockDialog', 'nameDialog', 'roomoutDialog'])
   }
 };
 </script>
@@ -223,89 +200,87 @@ textarea
   border: solid 1px black
 .text-form
   margin-top: auto
-// .chat
-//   border-left: solid 0.3px gray
+.chat
+  border-left: solid 0.3px gray
+  height: 100%
+  width: 50%
 .leave
   margin-top: auto
 
-// .chat
-//   height: 100%
-//   width: 50%
-
-// チャットの外側部分①
-#bms_messages_container
-  border-left: solid 0.3px gray
-  height: 600px
-  width: 100%
-
-// ヘッダー部分②
-#bms_chat_header
-  padding: 6px
-  font-size: 16px
-  height: 34px
-  border: 1px solid #ccc
-
-/* ステータスマークとユーザー名 */
-#bms_chat_user_status
-  float: left
-
-/* ステータスマーク */
-#bms_status_icon
-  float: left
-  line-height: 2em
-
-/* ユーザー名 */
-#bms_chat_user_name
-  float: left
-  line-height: 2em
-  padding-left: 8px
-
-/* タイムライン部分③ */
-#bms_messages
-  overflow: auto
+// チャット用
+// TODO:画面の高さに最適になるようにVueを組む
+.line-bc
   height: 100%
+  overflow-y: scroll
+  max-height: 800px
 
-/* メッセージ全般のスタイル */
-.bms_message
-  margin: 0px
-  padding: 0 14px
-  font-size: 16px
-  word-wrap: break-word
-  white-space: normal
+.balloon6
+  width: 100%
+  margin: 10px 0
+  overflow: hidden
 
-  &_box
-    margin-bottom: 20px
-    max-width: 100%
-    font-size: 16px
+/*以下、②左側のコメント*/
+.balloon6
+  & .faceicon
+    float: left
+    margin-right: -50px
+    width: 40px
 
-  &_content
-    padding: 5px 10px 5px 10px
+  & .faceicon img
+    width: 100%
+    height: auto
+    border-radius: 50%
 
-/* メッセージ１（左側） */
-.bms_left
-  float: left
-  line-height: 1.3em
+  & .chatting
+    width: 100%
+    text-align: left
 
-  & .bms_message_box
-    color: #333
-    background: #fff
-    border: 2px solid #13178E
-    border-radius: 20px 20px 20px 0px
-    margin-right: 50px
+.says
+  display: inline-block
+  position: relative
+  margin: 0 0 0 50px
+  padding: 10px
+  max-width: 250px
+  border-radius: 12px
+  background: #edf1ee
 
-/* メッセージ２（右側） */
-.bms_right
-  float: right
-  line-height: 1.3em
+  &:after
+    content: ""
+    display: inline-block
+    position: absolute
+    top: 3px
+    left: -19px
+    border: 8px solid transparent
+    border-right: 18px solid #edf1ee
+    -webkit-transform: rotate(35deg)
+    transform: rotate(35deg)
 
-  & .bms_message_box
-    color: #fff
-    background: #13178E
-    border: 2px solid #13178E
-    border-radius: 20px 20px 0px 20px
-    margin-left: 50px
+  & p
+    margin: 0
+    padding: 0
 
-/* 回り込みを解除 */
-.bms_clear
-  clear: both
+/*以下、③右側の緑コメント*/
+.mycomment
+  margin: 10px 0
+  text-align: right
+
+  & p
+    display: inline-block
+    position: relative
+    margin: 0 10px 0 0
+    padding: 8px
+    max-width: 250px
+    border-radius: 12px
+    background: #30e852
+    font-size: 15px
+
+  & p:after
+    content: ""
+    position: absolute
+    top: 3px
+    right: -19px
+    border: 8px solid transparent
+    border-left: 18px solid #30e852
+    -webkit-transform: rotate(-35deg)
+    transform: rotate(-35deg)
 </style>
