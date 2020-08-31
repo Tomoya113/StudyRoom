@@ -45,18 +45,57 @@
           <v-btn @click="changeRoomoutDialog" rounded color="error">Leave the room</v-btn>
         </div>
       </v-col>
-      <v-col class="d-flex flex-column chat" cols="3">
-        <!-- <div class="d-flex flex-column"> -->
+      <v-col class="d-flex flex-column chat bms_messages" cols="3">
         <h2>チャット</h2>
-        <div v-for="message in this.messages" :key="message.body">
-          <div class="d-flex">
+        <!-- タイムライン部分③ -->
+        <div id="bms_messages">
+          <div v-for="message in this.messages" :key="message.body">
+            <!-- <div class="bms_message bms_left"> -->
+            <v-avatar size="30px" style="margin-top:auto;float:left">
+              <img alt="Avatar" :src="photoURL" />
+            </v-avatar>
+            <div class="bms_message bms_left">
+              <span style="padding-left:15px;">{{ message.name }}</span>
+              <div class="bms_message_box">
+                <div class="bms_message_content">
+                  <div class="bms_message_text">{{ message.body }}</div>
+                </div>
+              </div>
+            </div>
+            <div class="bms_clear"></div>
+          </div>
+
+          <!--メッセージ２（右側）-->
+          <div class="bms_message bms_right">
+            <div class="bms_message_box">
+              <div class="bms_message_content">
+                <div class="bms_message_text">うん、まあまあいけとるな</div>
+              </div>
+            </div>
+          </div>
+          <div class="bms_clear"></div>
+        </div>
+
+        <!-- <div v-for="message in this.messages" :key="message.body">
+          <div class="message">
+            <v-avatar size="30px" style="float:left">
+              <img alt="Avatar" :src="photoURL" />
+            </v-avatar>
+            <div class="message_box">
+              <h4>{{ message.name }}</h4>
+              <div class="message_content">{{ message.body }}</div>
+            </div>
+        </div>-->
+
+        <!-- <div class="d-flex">
             <v-avatar size="36px">
               <img alt="Avatar" :src="photoURL" />
             </v-avatar>
             <h4>{{ message.name }}</h4>
           </div>
-          <p>{{ message.body }}</p>
-        </div>
+        <p>{{ message.body }}</p>-->
+        <!-- </div> -->
+
         <div class="d-flex align-center text-form">
           <v-text-field
             v-model="message"
@@ -152,11 +191,11 @@ export default {
     },
     join () {
       this.changeNameDialog();
-      this.joinRoom({ roomId: this.$route.params.studyroom_id, photoURL:this.photoURL, displayName: this.displayName })
+      this.joinRoom({ roomId: this.$route.params.studyroom_id, photoURL: this.photoURL, displayName: this.displayName })
     },
     submit () {
       if (this.message) {
-        this.sendMessage({ message: { name: this.displayName, photoURL: this.photoURL,  body: this.message } })
+        this.sendMessage({ message: { name: this.displayName, photoURL: this.photoURL, body: this.message } })
         this.message = ""
       }
     },
@@ -184,8 +223,89 @@ textarea
   border: solid 1px black
 .text-form
   margin-top: auto
-.chat
-  border-left: solid 0.3px gray
+// .chat
+//   border-left: solid 0.3px gray
 .leave
   margin-top: auto
+
+// .chat
+//   height: 100%
+//   width: 50%
+
+// チャットの外側部分①
+#bms_messages_container
+  border-left: solid 0.3px gray
+  height: 600px
+  width: 100%
+
+// ヘッダー部分②
+#bms_chat_header
+  padding: 6px
+  font-size: 16px
+  height: 34px
+  border: 1px solid #ccc
+
+/* ステータスマークとユーザー名 */
+#bms_chat_user_status
+  float: left
+
+/* ステータスマーク */
+#bms_status_icon
+  float: left
+  line-height: 2em
+
+/* ユーザー名 */
+#bms_chat_user_name
+  float: left
+  line-height: 2em
+  padding-left: 8px
+
+/* タイムライン部分③ */
+#bms_messages
+  overflow: auto
+  height: 100%
+
+/* メッセージ全般のスタイル */
+.bms_message
+  margin: 0px
+  padding: 0 14px
+  font-size: 16px
+  word-wrap: break-word
+  white-space: normal
+
+  &_box
+    margin-bottom: 20px
+    max-width: 100%
+    font-size: 16px
+
+  &_content
+    padding: 5px 10px 5px 10px
+
+/* メッセージ１（左側） */
+.bms_left
+  float: left
+  line-height: 1.3em
+
+  & .bms_message_box
+    color: #333
+    background: #fff
+    border: 2px solid #13178E
+    border-radius: 20px 20px 20px 0px
+    margin-right: 50px
+
+/* メッセージ２（右側） */
+.bms_right
+  float: right
+  line-height: 1.3em
+
+  & .bms_message_box
+    color: #fff
+    background: #13178E
+    border: 2px solid #13178E
+    border-radius: 20px 20px 0px 20px
+    margin-left: 50px
+
+/* 回り込みを解除 */
+.bms_clear
+  clear: both
 </style>
