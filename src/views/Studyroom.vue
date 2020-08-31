@@ -24,7 +24,9 @@
       <v-col class="d-flex flex-column" cols="9">
         <div>
           <video
-            width="400"
+            width="400px"
+            height="400px"
+            style="object-fit: cover;"
             v-show="this.isConnected"
             @loadeddata="onLoadedData"
             :srcObject.prop="this.srcObject"
@@ -32,7 +34,9 @@
             muted
           ></video>
           <video
-            width="400"
+            width="400px"
+            height="400px"
+            style="object-fit: cover;"
             v-for="screen in this.screens"
             :key="screen.id"
             @loadeddata="onLoadedData"
@@ -45,18 +49,30 @@
           <v-btn @click="changeRoomoutDialog" rounded color="error">Leave the room</v-btn>
         </div>
       </v-col>
-      <v-col class="d-flex flex-column chat" cols="3">
-        <!-- <div class="d-flex flex-column"> -->
+      <v-col class="d-flex flex-column chat bms_messages" cols="3">
         <h2>チャット</h2>
-        <div v-for="message in this.messages" :key="message.body">
-          <div class="d-flex">
-            <v-avatar size="36px">
-              <img alt="Avatar" :src="photoURL" />
-            </v-avatar>
-            <h4>{{ message.name }}</h4>
+        <div class="line-bc">
+          <div
+            v-for="message in this.messages"
+            :key="message.body"
+            :class="userId != message.id? 'balloon6':'mycomment'"
+          >
+            <div v-if="userId != message.id">
+              <v-avatar size="36px" class="faceicon">
+                <img alt="Avatar" :src="photoURL" />
+              </v-avatar>
+              <div class="chatting">
+                <div class="says">
+                  <small>{{ message.name }}</small>
+                  <p>{{ message.body }}</p>
+                </div>
+              </div>
+            </div>
+
+            <div v-else>
+              <p>{{ message.body }}</p>
+            </div>
           </div>
-          <p>id: {{ message.id }}</p>
-          <p>{{ message.body }}</p>
         </div>
         <div class="d-flex align-center text-form">
           <v-text-field
@@ -68,7 +84,6 @@
             @click:append-outer="submit"
           ></v-text-field>
         </div>
-        <!-- </div> -->
       </v-col>
     </v-row>
 
@@ -153,11 +168,11 @@ export default {
     },
     join () {
       this.changeNameDialog();
-      this.joinRoom({ roomId: this.$route.params.studyroom_id, photoURL:this.photoURL, displayName: this.displayName })
+      this.joinRoom({ roomId: this.$route.params.studyroom_id, photoURL: this.photoURL, displayName: this.displayName })
     },
     submit () {
       if (this.message) {
-        this.sendMessage({ message: { id: this.userId, name: this.displayName, photoURL: this.photoURL,  body: this.message } })
+        this.sendMessage({ message: { id: this.userId, name: this.displayName, photoURL: this.photoURL, body: this.message } })
         this.message = ""
       }
     },
@@ -187,6 +202,85 @@ textarea
   margin-top: auto
 .chat
   border-left: solid 0.3px gray
+  height: 100%
+  width: 50%
 .leave
   margin-top: auto
+
+// チャット用
+// TODO:画面の高さに最適になるようにVueを組む
+.line-bc
+  height: 100%
+  overflow-y: scroll
+  max-height: 800px
+
+.balloon6
+  width: 100%
+  margin: 10px 0
+  overflow: hidden
+
+/*以下、②左側のコメント*/
+.balloon6
+  & .faceicon
+    float: left
+    margin-right: -50px
+    width: 40px
+
+  & .faceicon img
+    width: 100%
+    height: auto
+    border-radius: 50%
+
+  & .chatting
+    width: 100%
+    text-align: left
+
+.says
+  display: inline-block
+  position: relative
+  margin: 0 0 0 50px
+  padding: 10px
+  max-width: 250px
+  border-radius: 12px
+  background: #edf1ee
+
+  &:after
+    content: ""
+    display: inline-block
+    position: absolute
+    top: 3px
+    left: -19px
+    border: 8px solid transparent
+    border-right: 18px solid #edf1ee
+    -webkit-transform: rotate(35deg)
+    transform: rotate(35deg)
+
+  & p
+    margin: 0
+    padding: 0
+
+/*以下、③右側の緑コメント*/
+.mycomment
+  margin: 10px 0
+  text-align: right
+
+  & p
+    display: inline-block
+    position: relative
+    margin: 0 10px 0 0
+    padding: 8px
+    max-width: 250px
+    border-radius: 12px
+    background: #30e852
+    font-size: 15px
+
+  & p:after
+    content: ""
+    position: absolute
+    top: 3px
+    right: -19px
+    border: 8px solid transparent
+    border-left: 18px solid #30e852
+    -webkit-transform: rotate(-35deg)
+    transform: rotate(-35deg)
 </style>
