@@ -6,22 +6,22 @@
       <v-card
         tile
         class="mx-auto studyroom-card"
-        v-for="studyroom in studyrooms"
-        :key="studyroom.title"
+        v-for="room in this.rooms"
+        :key="room.title"
       >
         <v-list-item>
           <v-list-item-content>
-            <v-list-item-title class="headline mb-1 center">{{studyroom.title}}</v-list-item-title>
-            <v-list-item-subtitle class="center">{{studyroom.subtitle}}</v-list-item-subtitle>
+            <v-list-item-title class="headline mb-1 center">{{room.title}}</v-list-item-title>
+            <v-list-item-subtitle class="center">{{room.subtitle}}</v-list-item-subtitle>
 
             <div style="margin-top:30px;margin-bottom:5px;">
               <p style="margin-bottom:3px;">入室人数</p>
               <!-- 入室状況のプロセスバーの表示 -->
               <v-progress-linear
                 color="teal"
-                :value="studyroom.enterPeople/studyroom.maxPeople*100"
+                :value="room.activeUsers/room.maxCount*100"
               ></v-progress-linear>
-              <p style="text-align:right">{{studyroom.enterPeople}}</p>
+              <p style="text-align:right">{{room.activeUsers}}</p>
             </div>
           </v-list-item-content>
         </v-list-item>
@@ -31,12 +31,12 @@
         <v-card-actions>
           <v-layout justify-center>
             <EnterRoomDialog
-              v-if="studyroom.lock"
-              :roomId="studyroom.roomId"
-              :lock="studyroom.lock"
-              :password="studyroom.password"
+              v-if="room.password"
+              :roomId="room.roomId"
+              :lock="room.password"
+              :password="room.password"
             ></EnterRoomDialog>
-            <v-btn :href="`/studyroom/${studyroom.roomId}`" rounded color="primary" class="enter-btn" v-else>入室する</v-btn>
+            <v-btn :href="`/studyroom/${room.roomId}`" rounded color="primary" class="enter-btn" v-else>入室する</v-btn>
           </v-layout>
         </v-card-actions>
       </v-card>
@@ -45,25 +45,20 @@
 </template>
 
 <script>
-import EnterRoomDialog from '../components/EnterRoomDialog'
-
+import EnterRoomDialog from '../components/EnterRoomDialog';
+import { mapActions, mapGetters } from 'vuex';
 export default {
   components: {
     EnterRoomDialog,
   },
-
-  data () {
-    return {
-      // studyroomに仮のデータを入れているので、これをDBデータに入れ替えてほしい
-      studyrooms: [
-        { roomId: '32891', title: 'Room101', subtitle: '数学がんばろう', enterPeople: '10', maxPeople: '20', lock: false, password: null },
-        { roomId: '48923', title: 'Room102', subtitle: '数学がんばろう', enterPeople: '20', maxPeople: '20', lock: false, password: null },
-        { roomId: '21314', title: 'Room103', subtitle: '数学がんばろう', enterPeople: '12', maxPeople: '20', lock: true, password: 'password' },
-        { roomId: '52432', title: 'Room104', subtitle: '数学がんばろう', enterPeople: '3', maxPeople: '20', lock: false, password: null },
-        { roomId: '45232', title: 'Room105', subtitle: '数学がんばろう', enterPeople: '5', maxPeople: '20', lock: true, password: 'password' },
-        { roomId: '64953', title: 'Room106', subtitle: '数学がんばろう', enterPeople: '5', maxPeople: '20', lock: false, password: null },
-      ],
-    }
+  created () {
+    this.setRoomInformation();
+    },
+  methods: {
+    ...mapActions(['setRoomInformation'])
+  },
+  computed: {
+    ...mapGetters(['rooms'])
   }
 }
 </script>

@@ -1,6 +1,7 @@
 import router from '../router';
 import Peer from 'skyway-js';
-import { APIKEY } from "@/apiKey.js";
+import { APIKEY } from '@/apiKey.js';
+import { db } from '@/main';
 
 // NOTE: 初期化用
 const getDefaultState = () => {
@@ -106,7 +107,28 @@ export default {
       // 自分が退出する時
       state.room.once("close", () => {
         console.log("disconnected");
+        const roomRef = db
+          .collection("rooms")
+          .doc(roomId);
+        // 部屋の参加人数を-1
+        roomRef.get().then((doc) => {
+          roomRef.update({
+            activeUsers:
+              doc.data().activeUsers - 1,
+          });
+        });
       });
+      // 部屋の参加人数を+1
+      const roomRef = db
+        .collection("rooms")
+        .doc(roomId)
+
+      roomRef.get().then(doc => {
+        roomRef.update({
+          activeUsers: doc.data().activeUsers + 1
+        });
+      })
+      console.log({ roomRef });
     },
     sendMessage(state, { message }) {
       console.log("seding message");
