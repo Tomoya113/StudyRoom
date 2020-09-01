@@ -152,6 +152,7 @@ export default {
   getters: {
     currentDisplayName: (state) => (state.currentDisplayName ? state.currentDisplayName : ''),
     currentDocId: (state) => (state.currentDocId),
+    fetchStudyLog: (state) => (state.studyLog),
   },
   modules: {},
 };
