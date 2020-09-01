@@ -31,7 +31,7 @@
               <v-sheet
                 v-for="(percent, i) in tracked[date]"
                 :key="i"
-                :title="category[i]"
+                :title="`${study_info[date]}`"
                 :color="colors[i]"
                 :width="`${percent}%`"
                 height="100%"
@@ -64,9 +64,10 @@ export default {
       today: moment(new Date).format('YYYY-MM-DD'),
       focus: '',
       type: 'month',
+      studyLog: [],
       tracked: [],
-      colors: ['#1867c0', '#fb8c00'],
-      category: ['目標達成率', '超過時間'],
+      colors: ['#d5ffd5', '#aaffaa', '#72e272', '#008E74'],
+      study_info: [],
     };
   },
   async created() {
@@ -79,13 +80,6 @@ export default {
     updateCalendar () {
      // Note: 表示月の変更
      this.calendar_title = this.$refs.calendar.title
-     // TODO: trackedに下記のような情報を入れる。
-     this.tracked =
-     {
-       '2020-08-09': [23,30],
-       '2020-08-08': [10],
-       '2020-07-08': [10],
-     }
    },
    prev () {
     this.$refs.calendar.prev()
@@ -94,14 +88,6 @@ export default {
     this.$refs.calendar.next()
    },
    updateName () {
-     // TODO: デバッグ用コードの削除
-     let bufDebugData = {
-       day: moment(new Date).format('YYYY-MM-DD'),
-       time: 100,
-       userId: this.userId
-     }
-     this.addStudyLog(bufDebugData)
-
      // TODO: this.displayNameのvalidationチェック
      if (this.currentDocId != null) {
       let bufData = {
@@ -114,7 +100,7 @@ export default {
    ...mapActions(['updateDisplayName', 'addStudyLog']),
   },
   computed: {
-    ...mapGetters(['currentDisplayName', 'currentDocId', 'userId']),
+    ...mapGetters(['currentDisplayName', 'currentDocId', 'userId', 'fetchStudyLog']),
   },
   watch:{
     currentDisplayName:function(newValue,oldValue){
@@ -122,6 +108,26 @@ export default {
         console.log("new: %s, old: %s",newValue,oldValue)
         this.displayName = newValue
       }
+    },
+    fetchStudyLog:function(newValue,oldValue){
+      console.log("new: %s, old: %s",newValue,oldValue)
+      this.studyLog = this.fetchStudyLog
+      var buf = {}
+      var buff = {}
+      this.studyLog.forEach(d => {
+        if ( d.time < 15 ) {
+          buf[d.day] = [100,0,0,0]
+        } else if ( d.time < 30 ) {
+          buf[d.day] = [0,100,0,0]
+        } else if (d.time < 60) {
+          buf[d.day] = [0,0,100,0]
+        } else {
+          buf[d.day] = [0,0,0,100]
+        }
+        buff[d.day] = `勉強時間 ${d.time}分`
+      })
+      this.tracked = buf
+      this.study_info = buff
     }
   },
 };
