@@ -16,6 +16,8 @@ const getDefaultState = () => {
     room: null,
     // テキストチャット
     messages: [],
+    // サブタイトル
+    subtitle: '',
     // ダイアログ
     nameDialog: false,
     lockDialog: false,
@@ -36,6 +38,8 @@ export default {
     room: null,
     // テキストチャット
     messages: [],
+    // サブタイトル
+    subtitle: '',
     // ダイアログ
     nameDialog: false,
     lockDialog: false,
@@ -66,6 +70,8 @@ export default {
       if (!state.peer.open) {
         return;
       }
+
+      const roomRef = db.collection("rooms").doc(roomId);
 
       state.isConnected = true;
       // roomに入室
@@ -107,9 +113,6 @@ export default {
       // 自分が退出する時
       state.room.once("close", () => {
         console.log("disconnected");
-        const roomRef = db
-          .collection("rooms")
-          .doc(roomId);
         // 部屋の参加人数を-1
         roomRef.get().then((doc) => {
           roomRef.update({
@@ -119,25 +122,36 @@ export default {
         });
       });
       // 部屋の参加人数を+1
-      const roomRef = db
-        .collection("rooms")
-        .doc(roomId)
-
       roomRef.get().then(doc => {
         roomRef.update({
           activeUsers: doc.data().activeUsers + 1
         });
+        state.subtitle = doc.data().subtitle
       })
-      console.log({ roomRef });
+      // 変更を監視
+      roomRef.onSnapshot(function(doc) {
+        console.log("Current data: ", doc && doc.data());
+        state.subtitle = doc.data().subtitle
+      });
     },
     sendMessage(state, { message }) {
       console.log("seding message");
       state.messages.push(message);
       state.room.send(message);
     },
-    setPassword(state, { password }) {
-      // TODO: FireStoreに良い感じにデータを追加する
-      console.log("setPassword", { password });
+    setPassword(state, { password, roomId }) {
+      console.log({ password })
+      const roomRef = db.collection("rooms").doc(roomId);
+      roomRef.update({
+        password: password
+      })
+    },
+    setSubtitle(state, { roomId, subtitle }) {
+      console.log({subtitle}, {roomId})
+      const roomRef = db.collection("rooms").doc(roomId);
+      roomRef.update({
+        subtitle: subtitle
+      })
     },
     recieveMessage(state, { message }) {
       console.log(message);
@@ -172,8 +186,11 @@ export default {
     sendMessage({ commit }, { message }) {
       commit("sendMessage", { message });
     },
-    setPassword({ commit }, { password }) {
-      commit("setPassword", { password });
+    setPassword({ commit }, { password, roomId }) {
+      commit("setPassword", { password, roomId });
+    },
+    setSubtitle({ commit }, { roomId, subtitle }) {
+      commit("setSubtitle", { roomId, subtitle })
     },
     recieveMessage({ commit }, { message }) {
       commit("recieveMessage", { message });
@@ -194,6 +211,7 @@ export default {
   },
   getters: {
     isConnected: (state) => state.isConnected,
+    subtitle: (state) => state.subtitle,
     srcObject: (state) => state.srcObject,
     screens: (state) => state.screens,
     logMessage: (state) => state.logMessage,

@@ -1,8 +1,10 @@
 import { db } from '@/main'
+import router from '@/router'
 
 export default {
   state: {
-    rooms: []
+    rooms: [],
+    errorMessage: ''
   },
   mutations: {
     setRoomInformation(state) {
@@ -13,16 +15,19 @@ export default {
           state.rooms.push(doc.data());
         });
       });
-      // const roomsRef = db.collection("rooms");
-      // roomsRef.get().then(querySnapshot => {
-      //   querySnapshot.forEach(doc => {
-      //     console.log(doc.data());
-      //     state.rooms.push(doc.data());
-      //   })
-      // })
     },
-    // listenChanges(state) {
-    // }
+    enterRoom(state, { password, roomId }) {
+      const roomRef = db.collection("rooms").doc(roomId);
+      // 部屋の参加人数を-1
+      roomRef.get().then((doc) => {
+        if (doc.data().password === password) {
+          console.log("hoge");
+          router.push({ name: "Studyroom", params: { studyroom_id: roomId } });
+        } else {
+          state.errorMessage = 'パスワードが違います'
+        }
+      });
+    }
   },
   actions: {
     setRoomInformation({ commit }) {
@@ -30,9 +35,13 @@ export default {
     },
     listenChanges({ commit }) {
       commit("listenChanges");
+    },
+    enterRoom({ commit },{ password, roomId } ){
+      commit("enterRoom", { password, roomId });
     }
   },
   getters : {
-    rooms: (state) => (state.rooms ? state.rooms : [])
+    rooms: (state) => (state.rooms ? state.rooms : []),
+    errorMessage: (state) => (state.errorMessage ? state.errorMessage : '')
   }
 }
