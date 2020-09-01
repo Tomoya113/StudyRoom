@@ -50,15 +50,17 @@
         </div>
       </v-col>
       <v-col class="d-flex flex-column chat bms_messages" cols="3">
-        <p>subtitle: {{ this.subtitle }}</p>
+        <h2>部屋の目標を設定</h2>
+        <p>現在の目標: {{ this.subtitle }}</p>
         <v-text-field
-            v-model="subtitleField"
-            append-outer-icon="mdi-send"
-            solo
-            label="サブタイトルを設定"
-            type="text"
-            @click:append-outer="submitSubtitle"
-          ></v-text-field>
+          v-model="subtitleField"
+          append-outer-icon="mdi-send"
+          solo
+          label="部屋の目標を設定"
+          type="text"
+          :value="this.subtitle"
+          @click:append-outer="submitSubtitle"
+        ></v-text-field>
         <h2>チャット</h2>
         <div class="line-bc">
           <div
