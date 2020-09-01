@@ -64,6 +64,7 @@ export default {
       today: moment(new Date).format('YYYY-MM-DD'),
       focus: '',
       type: 'month',
+      studyLog: [],
       tracked: [],
       colors: ['#d5ffd5', '#aaffaa', '#72e272', '2db52b'],
       category: ['目標達成率', '超過時間'],
@@ -114,7 +115,7 @@ export default {
    ...mapActions(['updateDisplayName', 'addStudyLog']),
   },
   computed: {
-    ...mapGetters(['currentDisplayName', 'currentDocId', 'userId']),
+    ...mapGetters(['currentDisplayName', 'currentDocId', 'userId', 'fetchStudyLog']),
   },
   watch:{
     currentDisplayName:function(newValue,oldValue){
@@ -122,6 +123,10 @@ export default {
         console.log("new: %s, old: %s",newValue,oldValue)
         this.displayName = newValue
       }
+    },
+    fetchStudyLog:function(newValue,oldValue){
+      console.log("new: %s, old: %s",newValue,oldValue)
+      this.studyLog = this.fetchStudyLog
     }
   },
 };
