@@ -115,12 +115,28 @@ export default {
         console.log("disconnected");
         // 部屋の参加人数を-1
         roomRef.get().then((doc) => {
-          roomRef.update({
-            activeUsers:
-              doc.data().activeUsers - 1,
-          });
+          console.log('before update', doc.data().activeUsers)
+          if (doc.data().activeUsers - 1 === 0) {
+            roomRef
+              .update({
+                activeUsers: doc.data().activeUsers - 1,
+                password: "",
+                subtitle: "",
+              })
+              .then(() => {
+                console.log("after update", doc.data().activeUsers);
+                roomRef.get().then((doc) => {
+                  console.log("get document again", doc.data().activeUsers);
+                });
+              });
+            } else {
+              roomRef
+                .update({
+                  activeusers: doc.data().activeUsers - 1
+                })
+            }
+          })
         });
-      });
       // 部屋の参加人数を+1
       roomRef.get().then(doc => {
         roomRef.update({
@@ -130,7 +146,7 @@ export default {
       })
       // 変更を監視
       roomRef.onSnapshot(function(doc) {
-        console.log("Current data: ", doc && doc.data());
+        // console.log("Current data: ", doc && doc.data());
         state.subtitle = doc.data().subtitle
       });
     },

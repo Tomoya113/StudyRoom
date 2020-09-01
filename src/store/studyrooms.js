@@ -14,6 +14,13 @@ export default {
         snapShot.forEach((doc) => {
           state.rooms.push(doc.data());
         });
+        state.rooms.sort((a, b) => {
+          if (a.title < b.title) {
+            return -1;
+          } else {
+            return 1;
+          }
+        })
       });
     },
     enterRoom(state, { password, roomId }) {
