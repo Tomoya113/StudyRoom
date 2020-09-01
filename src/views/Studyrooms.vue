@@ -34,7 +34,6 @@
               v-if="room.password"
               :roomId="room.roomId"
               :lock="room.password"
-              :password="room.password"
             ></EnterRoomDialog>
             <v-btn :href="`/studyroom/${room.roomId}`" rounded color="primary" class="enter-btn" v-else>入室する</v-btn>
           </v-layout>
