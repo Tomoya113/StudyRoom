@@ -50,6 +50,15 @@
         </div>
       </v-col>
       <v-col class="d-flex flex-column chat bms_messages" cols="3">
+        <p>subtitle: {{ this.subtitle }}</p>
+        <v-text-field
+            v-model="subtitleField"
+            append-outer-icon="mdi-send"
+            solo
+            label="サブタイトルを設定"
+            type="text"
+            @click:append-outer="submitSubtitle"
+          ></v-text-field>
         <h2>チャット</h2>
         <div class="line-bc">
           <div
@@ -152,6 +161,7 @@ export default {
       message: "",
       displayName: "",
       password: "",
+      subtitleField: ""
     };
   },
   async created () {
@@ -176,6 +186,12 @@ export default {
         this.message = ""
       }
     },
+    submitSubtitle () {
+      if (this.subtitleField) {
+        this.setSubtitle({ roomId: this.$route.params.studyroom_id, subtitle: this.subtitleField })
+        this.subtitleField = ""
+      }
+    },
     makePrivate () {
       this.changeLockDialog();
       this.setPassword({ roomId: this.$route.params.studyroom_id, password: this.password });
@@ -184,10 +200,10 @@ export default {
     leave () {
       this.roomout()
     },
-    ...mapActions(['setup', 'joinRoom', 'sendMessage', 'setPassword', 'changeNameDialog', 'changeLockDialog', 'changeRoomoutDialog', 'roomout']),
+    ...mapActions(['setup', 'joinRoom', 'sendMessage', 'setPassword', 'setSubtitle', 'changeNameDialog', 'changeLockDialog', 'changeRoomoutDialog', 'roomout']),
   },
   computed: {
-    ...mapGetters(['userId', 'userName', 'photoURL', 'isConnected', 'srcObject', 'screens', 'logMessage', 'messages', 'lockDialog', 'nameDialog', 'roomoutDialog'])
+    ...mapGetters(['userId', 'userName', 'photoURL', 'isConnected', 'subtitle', 'srcObject', 'screens', 'logMessage', 'messages', 'lockDialog', 'nameDialog', 'roomoutDialog'])
   }
 };
 </script>
