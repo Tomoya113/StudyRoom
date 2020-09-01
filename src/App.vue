@@ -8,9 +8,9 @@
 </template>
 
 <script>
-import firebase from 'firebase'
-import AppBar from './components/AppBar'
-import { mapActions, mapGetters } from 'vuex'
+import firebase from 'firebase';
+import AppBar from './components/AppBar';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   name: 'App',
@@ -21,12 +21,15 @@ export default {
   created() {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        this.setLoginUser(user)
-        this.initCurrentUser(user)
+        this.setLoginUser(user);
+        this.initCurrentUser(user);
+        if (this.$router.currentRoute.name == 'Home')
+          this.$router.push({ name: 'Studyrooms' });
       } else {
-        this.deleteLoginUser()
+        this.deleteLoginUser();
+        this.$router.push({ name: 'Home' });
       }
-    })
+    });
   },
   data: () => ({
     //
@@ -37,5 +40,5 @@ export default {
   computed: {
     ...mapGetters(['userName', 'photoURL']),
   },
-}
+};
 </script>
