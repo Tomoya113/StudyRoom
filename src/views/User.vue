@@ -31,7 +31,7 @@
               <v-sheet
                 v-for="(percent, i) in tracked[date]"
                 :key="i"
-                :title="study_info[0]"
+                :title="`${study_info[date]}`"
                 :color="colors[i]"
                 :width="`${percent}%`"
                 height="100%"
@@ -67,7 +67,7 @@ export default {
       studyLog: [],
       tracked: [],
       colors: ['#d5ffd5', '#aaffaa', '#72e272', '#2db52b'],
-      study_info: ['勉強時間'],
+      study_info: [],
     };
   },
   async created() {
@@ -88,14 +88,6 @@ export default {
     this.$refs.calendar.next()
    },
    updateName () {
-     // TODO: デバッグ用コードの削除
-     let bufDebugData = {
-       day: moment(new Date).format('YYYY-MM-DD'),
-       time: 100,
-       userId: this.userId
-     }
-     this.addStudyLog(bufDebugData)
-
      // TODO: this.displayNameのvalidationチェック
      if (this.currentDocId != null) {
       let bufData = {
@@ -121,6 +113,7 @@ export default {
       console.log("new: %s, old: %s",newValue,oldValue)
       this.studyLog = this.fetchStudyLog
       var buf = {}
+      var buff = {}
       this.studyLog.forEach(d => {
         if ( d.time < 15 ) {
           buf[d.day] = [100,0,0,0]
@@ -131,9 +124,10 @@ export default {
         } else {
           buf[d.day] = [0,0,0,100]
         }
+        buff[d.day] = `勉強時間 ${d.time}分`
       })
-      console.log(buf)
       this.tracked = buf
+      this.study_info = buff
     }
   },
 };
