@@ -14,7 +14,7 @@
         <v-card-text>
           この部屋に入るには、合言葉が必要です。
           <v-icon size="15">mdi-lock</v-icon>の表示がない場所は、合言葉なしで入室できます。
-          <v-text-field v-model="password" label="合言葉を入力" :error-messages="this.errorMessage" required></v-text-field>
+          <v-text-field v-model="password" label="合言葉を入力" :error-messages="this.errorMessage" autofocus required></v-text-field>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -39,10 +39,6 @@ export default {
     'roomId': {
       type: String,
       required: true
-    },
-    'lock': {
-      type: Boolean,
-      required: true,
     },
   },
   methods: {
