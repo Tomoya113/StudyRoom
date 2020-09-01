@@ -178,7 +178,7 @@ export default {
     },
     makePrivate () {
       this.changeLockDialog();
-      this.setPassword({ password: this.password });
+      this.setPassword({ roomId: this.$route.params.studyroom_id, password: this.password });
     },
     // ルームを退出する時の処理
     leave () {

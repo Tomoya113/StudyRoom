@@ -135,9 +135,12 @@ export default {
       state.messages.push(message);
       state.room.send(message);
     },
-    setPassword(state, { password }) {
-      // TODO: FireStoreに良い感じにデータを追加する
-      console.log("setPassword", { password });
+    setPassword(state, { password, roomId }) {
+      console.log({ password })
+      const roomRef = db.collection("rooms").doc(roomId);
+      roomRef.update({
+        password: password
+      })
     },
     recieveMessage(state, { message }) {
       console.log(message);
@@ -172,8 +175,8 @@ export default {
     sendMessage({ commit }, { message }) {
       commit("sendMessage", { message });
     },
-    setPassword({ commit }, { password }) {
-      commit("setPassword", { password });
+    setPassword({ commit }, { password, roomId }) {
+      commit("setPassword", { password, roomId });
     },
     recieveMessage({ commit }, { message }) {
       commit("recieveMessage", { message });
