@@ -74,7 +74,40 @@ export default {
     let bufUserName = this.currentDisplayName;
     if (bufUserName != '') {
       this.displayName = bufUserName;
-    }
+    }this.studyLog = this.fetchStudyLog
+    var bufColor = {}
+    var bufTime = {}
+    this.studyLog.forEach(d => {
+      if ( d.time < 15 ) {
+        bufColor[d.day] = [100,0,0,0]
+      } else if ( d.time < 30 ) {
+        bufColor[d.day] = [0,100,0,0]
+      } else if (d.time < 60) {
+        bufColor[d.day] = [0,0,100,0]
+      } else {
+        bufColor[d.day] = [0,0,0,100]
+      }
+      bufTime[d.day] = `勉強時間 ${d.time}分`
+    })
+    this.tracked = bufColor
+    this.study_info = bufTime
+    this.studyLog = this.fetchStudyLog
+    var buf = {}
+    var buff = {}
+    this.studyLog.forEach(d => {
+      if ( d.time < 15 ) {
+        buf[d.day] = [100,0,0,0]
+      } else if ( d.time < 30 ) {
+        buf[d.day] = [0,100,0,0]
+      } else if (d.time < 60) {
+        buf[d.day] = [0,0,100,0]
+      } else {
+        buf[d.day] = [0,0,0,100]
+      }
+      buff[d.day] = `勉強時間 ${d.time}分`
+    })
+    this.tracked = buf
+    this.study_info = buff
   },
   methods: {
     updateCalendar () {
