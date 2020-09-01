@@ -66,7 +66,7 @@ export default {
       type: 'month',
       studyLog: [],
       tracked: [],
-      colors: ['#d5ffd5', '#aaffaa', '#72e272', '#2db52b'],
+      colors: ['#d5ffd5', '#aaffaa', '#72e272', '#008E74'],
       study_info: [],
     };
   },
