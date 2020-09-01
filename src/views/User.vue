@@ -31,7 +31,7 @@
               <v-sheet
                 v-for="(percent, i) in tracked[date]"
                 :key="i"
-                :title="category[0]"
+                :title="study_info[0]"
                 :color="colors[i]"
                 :width="`${percent}%`"
                 height="100%"
@@ -66,8 +66,8 @@ export default {
       type: 'month',
       studyLog: [],
       tracked: [],
-      colors: ['#d5ffd5', '#aaffaa', '#72e272', '2db52b'],
-      category: ['目標達成率', '超過時間'],
+      colors: ['#d5ffd5', '#aaffaa', '#72e272', '#2db52b'],
+      study_info: ['勉強時間'],
     };
   },
   async created() {
@@ -80,13 +80,6 @@ export default {
     updateCalendar () {
      // Note: 表示月の変更
      this.calendar_title = this.$refs.calendar.title
-     // TODO: trackedに下記のような情報を入れる。
-     this.tracked =
-     {
-       '2020-08-09': [23,30],
-       '2020-08-08': [10],
-       '2020-07-08': [10],
-     }
    },
    prev () {
     this.$refs.calendar.prev()
@@ -127,6 +120,20 @@ export default {
     fetchStudyLog:function(newValue,oldValue){
       console.log("new: %s, old: %s",newValue,oldValue)
       this.studyLog = this.fetchStudyLog
+      var buf = {}
+      this.studyLog.forEach(d => {
+        if ( d.time < 15 ) {
+          buf[d.day] = [100,0,0,0]
+        } else if ( d.time < 30 ) {
+          buf[d.day] = [0,100,0,0]
+        } else if (d.time < 60) {
+          buf[d.day] = [0,0,100,0]
+        } else {
+          buf[d.day] = [0,0,0,100]
+        }
+      })
+      console.log(buf)
+      this.tracked = buf
     }
   },
 };
