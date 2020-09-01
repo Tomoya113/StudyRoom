@@ -31,7 +31,7 @@
               <v-sheet
                 v-for="(percent, i) in tracked[date]"
                 :key="i"
-                :title="category[i]"
+                :title="category[0]"
                 :color="colors[i]"
                 :width="`${percent}%`"
                 height="100%"
@@ -65,7 +65,7 @@ export default {
       focus: '',
       type: 'month',
       tracked: [],
-      colors: ['#1867c0', '#fb8c00'],
+      colors: ['#d5ffd5', '#aaffaa', '#72e272', '2db52b'],
       category: ['目標達成率', '超過時間'],
     };
   },
