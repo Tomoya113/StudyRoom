@@ -132,7 +132,7 @@ export default {
             } else {
               roomRef
                 .update({
-                  activeusers: doc.data().activeUsers - 1
+                  activeUsers: doc.data().activeUsers - 1
                 })
             }
           })
