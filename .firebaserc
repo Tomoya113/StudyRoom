@@ -1,0 +1,6 @@
+{
+  "projects": {
+    "default": "yakitori-rb",
+    "production": "yakitori-rb"
+  }
+}
