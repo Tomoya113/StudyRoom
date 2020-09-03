@@ -3,6 +3,7 @@ import moment from 'moment';
 
 export default {
   state: {
+    authUserId: null,
     currentDisplayName: null,
     currentDocId: null,
     studyLog: [],
@@ -30,7 +31,8 @@ export default {
   },
   actions: {
     initCurrentUser({ commit }, user) {
-      var db = firebase.firestore()
+      this.state.authUserId = user.uid;
+      var db = firebase.firestore();
       var userRef = db.collection('users');
       userRef.where('userId', '==', user.uid).get()
         .then( (query) =>  {
@@ -95,12 +97,12 @@ export default {
         let bufData = {
           day: '2020-08-30', //YYY-MM-DDの形式で
           time: 102, // 分(number型)
-          userId: user.uid // authのuserのUUID
         }
       */
       var today = moment(new Date).format('YYYY-MM-DD')
       var studyLogRef = firebase.firestore().collection('studylog')
-      studyLogRef.where('userId', '==', bufData.userId)
+      console.log(bufData);
+      studyLogRef.where('userId', '==', this.state.authUserId)
         .where('day', '==', today).get()
         .then( (query) =>  {
           if (query.docs.length == 1 ) {
@@ -111,7 +113,7 @@ export default {
               })
               .then(() => {
                 // 更新成功時
-                studyLogRef.where('userId', '==', bufData.userId).get()
+                studyLogRef.where('userId', '==', this.state.authUserId).get()
                   .then( (query) =>  {
                     let bufLog = [];
                     query.forEach((doc) => {
@@ -134,7 +136,7 @@ export default {
             studyLogRef.add( {
               day: today,
               time: bufData.time,
-              userId: bufData.userId
+              userId: this.state.authUserId
             })
             .then( () => {
               commit('addStudyLog', bufData);
@@ -150,6 +152,7 @@ export default {
     },
   },
   getters: {
+    authUserId: (state) => (state.authUserId ? state.authUserId : ''),
     currentDisplayName: (state) => (state.currentDisplayName ? state.currentDisplayName : ''),
     currentDocId: (state) => (state.currentDocId),
     fetchStudyLog: (state) => (state.studyLog),
