@@ -11,9 +11,12 @@
         >
           <h2>This is Studyroom Page</h2>
           <div>
-            <v-btn @click="changeLockDialog" rounded color="secondary">合言葉を設定</v-btn>
             <!-- NOTE ユーザー情報が取得されるまで押せなくしたほうがいいかも -->
-            <v-btn v-if="!this.isConnected" @click="confirm" rounded color="primary">Join the room</v-btn>
+            <v-btn href="/studyrooms" v-if="!this.isConnected" rounded color="primary">Leave the room</v-btn>
+            <v-btn v-if="!this.isConnected" @click="confirm" rounded color="warning">Join the room</v-btn>
+            <div class="lock-button">
+              <v-btn @click="changeLockDialog" rounded color="secondary">合言葉を設定</v-btn>
+            </div>
           </div>
         </v-row>
       </v-col>
@@ -239,6 +242,10 @@ textarea
   width: 50%
 .leave
   margin-top: auto
+
+.lock-button
+  text-align: center
+  margin-top: 10px
 
 // チャット用
 // TODO:画面の高さに最適になるようにVueを組む
