@@ -17,6 +17,7 @@ const getDefaultState = () => {
     // テキストチャット
     messages: [],
     // サブタイトル
+    title: '',
     subtitle: '',
     // ダイアログ
     nameDialog: false,
@@ -143,6 +144,9 @@ export default {
           activeUsers: doc.data().activeUsers + 1
         });
         state.subtitle = doc.data().subtitle
+        console.log(doc.data().title)
+        state.title = doc.data().title
+        console.log(state.title)
       })
       // 変更を監視
       roomRef.onSnapshot(function(doc) {
@@ -228,6 +232,7 @@ export default {
   getters: {
     isConnected: (state) => state.isConnected,
     subtitle: (state) => state.subtitle,
+    title: (state) => state.title,
     srcObject: (state) => state.srcObject,
     screens: (state) => state.screens,
     logMessage: (state) => state.logMessage,
