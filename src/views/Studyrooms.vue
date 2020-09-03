@@ -2,7 +2,7 @@
   <div>
     <h1 class="display-1" style="margin:30px">自習室を探そう</h1>
 
-    <v-container fluid>
+    <v-container fluid class="d-flex justify-center flex-wrap">
       <v-card
         tile
         class="mx-auto studyroom-card"
@@ -12,7 +12,8 @@
         <v-list-item>
           <v-list-item-content>
             <v-list-item-title class="headline mb-1 center">{{room.title}}</v-list-item-title>
-            <v-list-item-subtitle class="center">{{room.subtitle}}</v-list-item-subtitle>
+            <v-list-item-subtitle class="center" v-if="room.subtitle">{{room.subtitle}}</v-list-item-subtitle>
+            <v-list-item-subtitle class="center" v-else style="color:#ffffff">color</v-list-item-subtitle>
 
             <div style="margin-top:30px;margin-bottom:5px;">
               <p style="margin-bottom:3px;">入室人数</p>

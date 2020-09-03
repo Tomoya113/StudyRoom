@@ -1,9 +1,9 @@
 <template>
-  <v-app>
+  <v-app class="d-flex">
     <AppBar v-if="this.$route.name !== 'Studyroom'" />
-    <v-content style="height:100%">
+    <v-main style="height:100%">
       <router-view />
-    </v-content>
+    </v-main>
   </v-app>
 </template>
 
