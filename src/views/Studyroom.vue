@@ -149,7 +149,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="green darken-1" text @click.stop="changeRoomoutDialog">キャンセル</v-btn>
-          <v-btn color="green darken-1" text @click.stop="roomout">決定</v-btn>
+          <v-btn color="green darken-1" text @click.stop="leave">決定</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -188,6 +188,7 @@ export default {
     join () {
       this.changeNameDialog();
       this.joinTime = moment(new Date);
+      console.log(this.joinTime)
       this.joinRoom({ roomId: this.$route.params.studyroom_id, photoURL: this.photoURL, displayName: this.displayName })
     },
     submit () {
@@ -208,9 +209,19 @@ export default {
     },
     // ルームを退出する時の処理
     leave () {
+      console.log('leave')
+      if ( this.joinTime != null ) {
+        console.log('in leave')
+        let _time = Math.floor(moment(new Date).diff(this.joinTime, 's', false) / 60)
+        let bufData = {
+          day: moment(new Date).format('YYYY-MM-DD'),
+          time: _time,
+        }
+        this.addStudyLog(bufData)
+      }
       this.roomout()
     },
-    ...mapActions(['setup', 'joinRoom', 'sendMessage', 'setPassword', 'setSubtitle', 'changeNameDialog', 'changeLockDialog', 'changeRoomoutDialog', 'roomout']),
+    ...mapActions(['setup', 'joinRoom', 'sendMessage', 'setPassword', 'setSubtitle', 'changeNameDialog', 'changeLockDialog', 'changeRoomoutDialog', 'roomout', 'addStudyLog']),
   },
   computed: {
     ...mapGetters(['userId', 'userName', 'photoURL', 'isConnected', 'title', 'subtitle', 'srcObject', 'screens', 'logMessage', 'messages', 'lockDialog', 'nameDialog', 'roomoutDialog'])
