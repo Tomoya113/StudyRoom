@@ -74,7 +74,7 @@
           >
             <div v-if="userId != message.id">
               <v-avatar size="36px" class="faceicon">
-                <img alt="Avatar" :src="photoURL" />
+                <img alt="Avatar" :src="message.photoURL" />
               </v-avatar>
               <div class="chatting">
                 <div class="says">
