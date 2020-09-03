@@ -50,7 +50,8 @@
         </div>
       </v-col>
       <v-col class="d-flex flex-column chat bms_messages" cols="3">
-        <h2>部屋の目標を設定</h2>
+        <h2>{{ this.$store.state.studyroom.title }}</h2>
+        <h4>部屋の目標を設定</h4>
         <p>現在の目標: {{ this.subtitle }}</p>
         <v-text-field
           v-model="subtitleField"
@@ -156,6 +157,7 @@
 import { mapActions, mapGetters } from 'vuex';
 
 export default {
+  name: 'Studyroom',
   data () {
     return {
       //ダイアログ制御用（合言葉）
@@ -167,7 +169,6 @@ export default {
     };
   },
   async created () {
-    await this.setup();
   },
   methods: {
     // カメラのロードが終わった時
@@ -205,8 +206,22 @@ export default {
     ...mapActions(['setup', 'joinRoom', 'sendMessage', 'setPassword', 'setSubtitle', 'changeNameDialog', 'changeLockDialog', 'changeRoomoutDialog', 'roomout']),
   },
   computed: {
-    ...mapGetters(['userId', 'userName', 'photoURL', 'isConnected', 'subtitle', 'srcObject', 'screens', 'logMessage', 'messages', 'lockDialog', 'nameDialog', 'roomoutDialog'])
-  }
+    ...mapGetters(['userId', 'userName', 'photoURL', 'isConnected', 'title', 'subtitle', 'srcObject', 'screens', 'logMessage', 'messages', 'lockDialog', 'nameDialog', 'roomoutDialog'])
+  },
+  watch: {
+    '$route' (to, from) {
+      console.log(to, from)
+      console.log('route switched')
+    }
+  },
+  beforeRouteUpdate(to, from, next) {
+    let answer = window.confirm("Data you've inputted won't be synced, OK?");
+    if (answer) {
+      next();
+    } else {
+      next(false);
+    }
+  },
 };
 </script>
 
@@ -230,7 +245,10 @@ textarea
 .line-bc
   height: 100%
   overflow-y: scroll
-  max-height: 800px
+  // この高さを超えるとスクロールするようになる
+  // max-height: 500px
+  // ワンチャンこれが最強かもしれん
+  max-height: 60vh
 
 .balloon6
   width: 100%
