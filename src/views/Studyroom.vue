@@ -172,6 +172,7 @@ export default {
     };
   },
   async created () {
+    await this.setup();
   },
   methods: {
     // カメラのロードが終わった時
@@ -211,20 +212,20 @@ export default {
   computed: {
     ...mapGetters(['userId', 'userName', 'photoURL', 'isConnected', 'title', 'subtitle', 'srcObject', 'screens', 'logMessage', 'messages', 'lockDialog', 'nameDialog', 'roomoutDialog'])
   },
-  watch: {
-    '$route' (to, from) {
-      console.log(to, from)
-      console.log('route switched')
-    }
-  },
-  beforeRouteUpdate(to, from, next) {
-    let answer = window.confirm("Data you've inputted won't be synced, OK?");
-    if (answer) {
-      next();
-    } else {
-      next(false);
-    }
-  },
+  // watch: {
+  //   '$route' (to, from) {
+  //     console.log(to, from)
+  //     console.log('route switched')
+  //   }
+  // },
+  // beforeRouteUpdate(to, from, next) {
+  //   let answer = window.confirm("Data you've inputted won't be synced, OK?");
+  //   if (answer) {
+  //     next();
+  //   } else {
+  //     next(false);
+  //   }
+  // },
 };
 </script>
 
