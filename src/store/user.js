@@ -3,6 +3,7 @@ import moment from 'moment';
 
 export default {
   state: {
+    authUserId: null,
     currentDisplayName: null,
     currentDocId: null,
     studyLog: [],
@@ -30,7 +31,8 @@ export default {
   },
   actions: {
     initCurrentUser({ commit }, user) {
-      var db = firebase.firestore()
+      this.state.authUserId = user.uid;
+      var db = firebase.firestore();
       var userRef = db.collection('users');
       userRef.where('userId', '==', user.uid).get()
         .then( (query) =>  {
@@ -150,6 +152,7 @@ export default {
     },
   },
   getters: {
+    authUserId: (state) => (state.authUserId ? state.authUserId : ''),
     currentDisplayName: (state) => (state.currentDisplayName ? state.currentDisplayName : ''),
     currentDocId: (state) => (state.currentDocId),
     fetchStudyLog: (state) => (state.studyLog),
