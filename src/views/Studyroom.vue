@@ -158,6 +158,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import moment from 'moment';
 
 export default {
   name: 'Studyroom',
@@ -168,7 +169,8 @@ export default {
       message: "",
       displayName: "",
       password: "",
-      subtitleField: ""
+      subtitleField: "",
+      joinTime: null
     };
   },
   async created () {
@@ -185,6 +187,7 @@ export default {
     },
     join () {
       this.changeNameDialog();
+      this.joinTime = moment(new Date);
       this.joinRoom({ roomId: this.$route.params.studyroom_id, photoURL: this.photoURL, displayName: this.displayName })
     },
     submit () {
