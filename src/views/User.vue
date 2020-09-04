@@ -40,13 +40,6 @@
         </template>
       </v-calendar>
     </v-sheet>
-
-    <!-- currentDisplayName変更用debug -->
-    <div>
-      <h3>自習室表示名</h3>
-      <input v-model="displayName" placeholder="表示名" />
-      <v-btn color="info" @click="updateName">表示名変更</v-btn>
-    </div>
   </div>
 </template>
 
