@@ -11,18 +11,24 @@
       >
         <v-list-item>
           <v-list-item-content>
-            <v-list-item-title class="headline mb-1 center">{{room.title}}</v-list-item-title>
-            <v-list-item-subtitle class="center" v-if="room.subtitle">{{room.subtitle}}</v-list-item-subtitle>
-            <v-list-item-subtitle class="center" v-else style="color:#ffffff">color</v-list-item-subtitle>
+            <v-list-item-title class="headline mb-1 center">{{
+              room.title
+            }}</v-list-item-title>
+            <v-list-item-subtitle class="center" v-if="room.subtitle">{{
+              room.subtitle
+            }}</v-list-item-subtitle>
+            <v-list-item-subtitle class="center" v-else style="color:#ffffff"
+              >color</v-list-item-subtitle
+            >
 
             <div style="margin-top:30px;margin-bottom:5px;">
               <p style="margin-bottom:3px;">入室人数</p>
               <!-- 入室状況のプロセスバーの表示 -->
               <v-progress-linear
                 color="teal"
-                :value="room.activeUsers/room.maxCount*100"
+                :value="(room.screensnum / room.maxCount) * 100"
               ></v-progress-linear>
-              <p style="text-align:right">{{room.activeUsers}}</p>
+              <p style="text-align:right">{{ room.screensnum }}</p>
             </div>
           </v-list-item-content>
         </v-list-item>
@@ -35,7 +41,14 @@
               v-if="room.password"
               :roomId="room.roomId"
             ></EnterRoomDialog>
-            <v-btn :href="`/studyroom/${room.roomId}`" rounded color="primary" class="enter-btn" v-else>入室する</v-btn>
+            <v-btn
+              :href="`/studyroom/${room.roomId}`"
+              rounded
+              color="primary"
+              class="enter-btn"
+              v-else
+              >入室する</v-btn
+            >
           </v-layout>
         </v-card-actions>
       </v-card>
@@ -50,16 +63,16 @@ export default {
   components: {
     EnterRoomDialog,
   },
-  created () {
+  created() {
     this.setRoomInformation();
-    },
+  },
   methods: {
-    ...mapActions(['setRoomInformation'])
+    ...mapActions(['setRoomInformation']),
   },
   computed: {
-    ...mapGetters(['rooms'])
-  }
-}
+    ...mapGetters(['rooms']),
+  },
+};
 </script>
 
 <style scoped lang="sass">
