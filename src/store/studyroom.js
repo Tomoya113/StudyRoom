@@ -123,6 +123,9 @@ export default {
       // 自分が退出する時
       state.room.once('close', () => {
         console.log('disconnected');
+        roomRef.update({
+          screensnum: state.screens.length,
+        });
         // 部屋の参加人数を-1
         roomRef.get().then((doc) => {
           console.log('before update', doc.data().activeUsers);
