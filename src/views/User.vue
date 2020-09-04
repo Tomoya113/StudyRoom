@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-content>
     <!-- カレンダータイトル -->
     <div class="calendar_top">
       <h1 class="display-1" style="margin:30px">勉強の記録</h1>
@@ -42,12 +42,12 @@
     </v-sheet>
 
     <!-- currentDisplayName変更用debug -->
-    <div>
+    <!-- <div>
       <h3>自習室表示名</h3>
       <input v-model="displayName" placeholder="表示名" />
       <v-btn color="info" @click="updateName">表示名変更</v-btn>
-    </div>
-  </div>
+    </div>-->
+  </v-content>
 </template>
 
 <script>
@@ -55,7 +55,7 @@ import moment from 'moment';
 import { mapActions, mapGetters } from 'vuex';
 
 export default {
-  data() {
+  data () {
     return {
       displayName: '',
       calendar_title: '',
@@ -68,7 +68,7 @@ export default {
       study_info: [],
     };
   },
-  async created() {
+  async created () {
     let bufUserName = this.currentDisplayName;
     if (bufUserName != '') {
       this.displayName = bufUserName;
@@ -109,17 +109,17 @@ export default {
     this.study_info = buff;
   },
   methods: {
-    updateCalendar() {
+    updateCalendar () {
       // Note: 表示月の変更
       this.calendar_title = this.$refs.calendar.title;
     },
-    prev() {
+    prev () {
       this.$refs.calendar.prev();
     },
-    next() {
+    next () {
       this.$refs.calendar.next();
     },
-    updateName() {
+    updateName () {
       // TODO: this.displayNameのvalidationチェック
       if (this.currentDocId != null) {
         let bufData = {
@@ -140,13 +140,13 @@ export default {
     ]),
   },
   watch: {
-    currentDisplayName: function(newValue, oldValue) {
+    currentDisplayName: function (newValue, oldValue) {
       if (this.displayName == '') {
         console.log('new: %s, old: %s', newValue, oldValue);
         this.displayName = newValue;
       }
     },
-    fetchStudyLog: function(newValue, oldValue) {
+    fetchStudyLog: function (newValue, oldValue) {
       console.log('new: %s, old: %s', newValue, oldValue);
       this.studyLog = this.fetchStudyLog;
       var buf = {};
