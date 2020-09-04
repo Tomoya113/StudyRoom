@@ -133,7 +133,7 @@ export default {
         // 部屋の参加人数を-1
         roomRef.get().then((doc) => {
           console.log('before update', doc.data().activeUsers);
-          if (doc.data().screensnum - 1 === 0) {
+          if (doc.data().screensnum === 0) {
             roomRef
               .update({
                 activeUsers: doc.data().activeUsers - 1,
