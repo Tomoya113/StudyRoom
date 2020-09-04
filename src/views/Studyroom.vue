@@ -70,7 +70,7 @@
         </div>
       </v-col>
       <v-col class="d-flex flex-column chat bms_messages" cols="3">
-        <h2>{{ this.$store.state.studyroom.title }}</h2>
+        <h2>{{ this.title }}</h2>
         <h4>部屋の目標を設定</h4>
         <p>現在の目標: {{ this.subtitle }}</p>
         <v-text-field
