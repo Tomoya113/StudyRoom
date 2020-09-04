@@ -9,7 +9,7 @@
       <v-btn fab text small color="grey darken-2" @click="next">
         <v-icon small>mdi-chevron-right</v-icon>
       </v-btn>
-      <h2>{{ calendar_title }}</h2>
+      <h2 style="margin-left: 30px;">{{ calendar_title }}</h2>
     </div>
 
     <!-- calendar -->
@@ -25,7 +25,7 @@
       >
         <template v-slot:day="{ present, past, date }">
           <v-row class="fill-height">
-            <template v-if="past && tracked[date]">
+            <template v-if="(past && tracked[date]) || (present && tracked[date])">
               <v-sheet
                 v-for="(percent, i) in tracked[date]"
                 :key="i"
@@ -40,13 +40,6 @@
         </template>
       </v-calendar>
     </v-sheet>
-
-    <!-- currentDisplayName変更用debug -->
-    <div>
-      <h3>自習室表示名</h3>
-      <input v-model="displayName" placeholder="表示名" />
-      <!-- <v-btn color="info" @click="updateName">表示名変更</v-btn> -->
-    </div>
   </div>
 </template>
 
@@ -64,7 +57,7 @@ export default {
       type: "month",
       studyLog: [],
       tracked: [],
-      colors: ["#d5ffd5", "#aaffaa", "#72e272", "#008E74"],
+      colors: ['#eaffd5', '#d5f1b8', '#bfea95', '#aae272'],
       study_info: [],
     };
   },
