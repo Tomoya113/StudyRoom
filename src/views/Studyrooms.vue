@@ -18,7 +18,7 @@
               room.subtitle
             }}</v-list-item-subtitle>
             <v-list-item-subtitle class="center" v-else style="color:#ffffff"
-              >color</v-list-item-subtitle
+              >見ないで (*ﾉωﾉ) ｲﾔﾝ</v-list-item-subtitle
             >
 
             <div style="margin-top:30px;margin-bottom:5px;">
