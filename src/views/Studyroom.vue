@@ -24,6 +24,7 @@
               @click="confirm"
               rounded
               color="warning"
+              :disabled="!this.userId"
               >Join the room</v-btn
             >
             <div class="lock-button">
