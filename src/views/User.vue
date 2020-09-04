@@ -44,17 +44,17 @@
 </template>
 
 <script>
-import moment from 'moment';
-import { mapActions, mapGetters } from 'vuex';
+import moment from "moment";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   data() {
     return {
-      displayName: '',
-      calendar_title: '',
-      today: moment(new Date()).format('YYYY-MM-DD'),
-      focus: '',
-      type: 'month',
+      displayName: "",
+      calendar_title: "",
+      today: moment(new Date()).format("YYYY-MM-DD"),
+      focus: "",
+      type: "month",
       studyLog: [],
       tracked: [],
       colors: ['#eaffd5', '#d5f1b8', '#bfea95', '#aae272'],
@@ -63,7 +63,7 @@ export default {
   },
   async created() {
     let bufUserName = this.currentDisplayName;
-    if (bufUserName != '') {
+    if (bufUserName != "") {
       this.displayName = bufUserName;
     }
     this.studyLog = this.fetchStudyLog;
@@ -122,25 +122,25 @@ export default {
         this.updateDisplayName(bufData);
       }
     },
-    ...mapActions(['updateDisplayName', 'addStudyLog']),
+    ...mapActions(["updateDisplayName", "addStudyLog"]),
   },
   computed: {
     ...mapGetters([
-      'currentDisplayName',
-      'currentDocId',
-      'userId',
-      'fetchStudyLog',
+      "currentDisplayName",
+      "currentDocId",
+      "userId",
+      "fetchStudyLog",
     ]),
   },
   watch: {
-    currentDisplayName: function(newValue, oldValue) {
-      if (this.displayName == '') {
-        console.log('new: %s, old: %s', newValue, oldValue);
+    currentDisplayName: function (newValue, oldValue) {
+      if (this.displayName == "") {
+        console.log("new: %s, old: %s", newValue, oldValue);
         this.displayName = newValue;
       }
     },
-    fetchStudyLog: function(newValue, oldValue) {
-      console.log('new: %s, old: %s', newValue, oldValue);
+    fetchStudyLog: function (newValue, oldValue) {
+      console.log("new: %s, old: %s", newValue, oldValue);
       this.studyLog = this.fetchStudyLog;
       var buf = {};
       var buff = {};
