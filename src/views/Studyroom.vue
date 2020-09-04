@@ -12,10 +12,24 @@
           <h2>This is Studyroom Page</h2>
           <div>
             <!-- NOTE ユーザー情報が取得されるまで押せなくしたほうがいいかも -->
-            <v-btn href="/studyrooms" v-if="!this.isConnected" rounded color="primary">Leave the room</v-btn>
-            <v-btn v-if="!this.isConnected" @click="confirm" rounded color="warning">Join the room</v-btn>
+            <v-btn
+              href="/studyrooms"
+              v-if="!this.isConnected"
+              rounded
+              color="primary"
+              >Leave the room</v-btn
+            >
+            <v-btn
+              v-if="!this.isConnected"
+              @click="confirm"
+              rounded
+              color="warning"
+              >Join the room</v-btn
+            >
             <div class="lock-button">
-              <v-btn @click="changeLockDialog" rounded color="secondary">合言葉を設定</v-btn>
+              <v-btn @click="changeLockDialog" rounded color="secondary"
+                >合言葉を設定</v-btn
+              >
             </div>
           </div>
         </v-row>
@@ -49,7 +63,9 @@
           ></video>
         </div>
         <div class="d-flex justify-end leave">
-          <v-btn @click="changeRoomoutDialog" rounded color="error">Leave the room</v-btn>
+          <v-btn @click="changeRoomoutDialog" rounded color="error"
+            >Leave the room</v-btn
+          >
         </div>
       </v-col>
       <v-col class="d-flex flex-column chat bms_messages" cols="3">
@@ -70,7 +86,7 @@
           <div
             v-for="message in this.messages"
             :key="message.body"
-            :class="userId != message.id? 'balloon6':'mycomment'"
+            :class="userId != message.id ? 'balloon6' : 'mycomment'"
           >
             <div v-if="userId != message.id">
               <v-avatar size="36px" class="faceicon">
@@ -120,8 +136,12 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="green darken-1" text @click.stop="changeLockDialog">キャンセル</v-btn>
-          <v-btn color="green darken-1" text @click.stop="makePrivate">決定</v-btn>
+          <v-btn color="green darken-1" text @click.stop="changeLockDialog"
+            >キャンセル</v-btn
+          >
+          <v-btn color="green darken-1" text @click.stop="makePrivate"
+            >決定</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -132,11 +152,18 @@
         <v-card-title>表示名を変更</v-card-title>
         <v-card-text>
           チャットやビデオ画面に表示される表示名を変更することができます。
-          <v-text-field label="表示名" v-model="displayName" required autofocus></v-text-field>
+          <v-text-field
+            label="表示名"
+            v-model="displayName"
+            required
+            autofocus
+          ></v-text-field>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="green darken-1" text @click.stop="changeNameDialog">キャンセル</v-btn>
+          <v-btn color="green darken-1" text @click.stop="changeNameDialog"
+            >キャンセル</v-btn
+          >
           <v-btn color="green darken-1" text @click.stop="join">決定</v-btn>
         </v-card-actions>
       </v-card>
@@ -148,7 +175,9 @@
         <v-card-title>本当に退出しますか？</v-card-title>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="green darken-1" text @click.stop="changeRoomoutDialog">キャンセル</v-btn>
+          <v-btn color="green darken-1" text @click.stop="changeRoomoutDialog"
+            >キャンセル</v-btn
+          >
           <v-btn color="green darken-1" text @click.stop="leave">決定</v-btn>
         </v-card-actions>
       </v-card>
@@ -160,71 +189,120 @@
 import { mapActions, mapGetters } from 'vuex';
 import moment from 'moment';
 
+history.pushState(null, null, location.href);
+window.addEventListener('popstate', () => {
+  history.go(1);
+});
+
 export default {
   name: 'Studyroom',
-  data () {
+  data() {
     return {
       //ダイアログ制御用（合言葉）
       lockSwitch: false,
-      message: "",
-      displayName: "",
-      password: "",
-      subtitleField: "",
-      joinTime: null
+      message: '',
+      displayName: '',
+      password: '',
+      subtitleField: '',
+      joinTime: null,
     };
   },
-  async created () {
+  async created() {
     await this.setup();
   },
   methods: {
     // カメラのロードが終わった時
-    onLoadedData (event) {
+    onLoadedData(event) {
       event.target.play().catch(console.error);
     },
-    confirm () {
+    confirm() {
       this.displayName = this.userName;
       this.changeNameDialog();
     },
-    join () {
+    join() {
       this.changeNameDialog();
-      this.joinTime = moment(new Date);
-      console.log(this.joinTime)
-      this.joinRoom({ roomId: this.$route.params.studyroom_id, photoURL: this.photoURL, displayName: this.displayName })
+      this.joinTime = moment(new Date());
+      console.log(this.joinTime);
+      this.joinRoom({
+        roomId: this.$route.params.studyroom_id,
+        photoURL: this.photoURL,
+        displayName: this.displayName,
+      });
     },
-    submit () {
+    submit() {
       if (this.message) {
-        this.sendMessage({ message: { id: this.userId, name: this.displayName, photoURL: this.photoURL, body: this.message } })
-        this.message = ""
+        this.sendMessage({
+          message: {
+            id: this.userId,
+            name: this.displayName,
+            photoURL: this.photoURL,
+            body: this.message,
+          },
+        });
+        this.message = '';
       }
     },
-    submitSubtitle () {
+    submitSubtitle() {
       if (this.subtitleField) {
-        this.setSubtitle({ roomId: this.$route.params.studyroom_id, subtitle: this.subtitleField })
-        this.subtitleField = ""
+        this.setSubtitle({
+          roomId: this.$route.params.studyroom_id,
+          subtitle: this.subtitleField,
+        });
+        this.subtitleField = '';
       }
     },
-    makePrivate () {
+    makePrivate() {
       this.changeLockDialog();
-      this.setPassword({ roomId: this.$route.params.studyroom_id, password: this.password });
+      this.setPassword({
+        roomId: this.$route.params.studyroom_id,
+        password: this.password,
+      });
     },
     // ルームを退出する時の処理
-    leave () {
-      console.log('leave')
-      if ( this.joinTime != null ) {
-        console.log('in leave')
-        let _time = Math.floor(moment(new Date).diff(this.joinTime, 's', false) / 60)
+    leave() {
+      console.log('leave');
+      if (this.joinTime != null) {
+        console.log('in leave');
+        let _time = Math.floor(
+          moment(new Date()).diff(this.joinTime, 's', false) / 60
+        );
         let bufData = {
-          day: moment(new Date).format('YYYY-MM-DD'),
+          day: moment(new Date()).format('YYYY-MM-DD'),
           time: _time,
-        }
-        this.addStudyLog(bufData)
+        };
+        this.addStudyLog(bufData);
       }
-      this.roomout()
+      this.roomout();
     },
-    ...mapActions(['setup', 'joinRoom', 'sendMessage', 'setPassword', 'setSubtitle', 'changeNameDialog', 'changeLockDialog', 'changeRoomoutDialog', 'roomout', 'addStudyLog']),
+    ...mapActions([
+      'setup',
+      'joinRoom',
+      'sendMessage',
+      'setPassword',
+      'setSubtitle',
+      'changeNameDialog',
+      'changeLockDialog',
+      'changeRoomoutDialog',
+      'roomout',
+      'addStudyLog',
+    ]),
   },
   computed: {
-    ...mapGetters(['userId', 'userName', 'photoURL', 'isConnected', 'title', 'subtitle', 'srcObject', 'screens', 'logMessage', 'messages', 'lockDialog', 'nameDialog', 'roomoutDialog'])
+    ...mapGetters([
+      'userId',
+      'userName',
+      'photoURL',
+      'isConnected',
+      'title',
+      'subtitle',
+      'srcObject',
+      'screens',
+      'logMessage',
+      'messages',
+      'lockDialog',
+      'nameDialog',
+      'roomoutDialog',
+    ]),
   },
   // watch: {
   //   '$route' (to, from) {

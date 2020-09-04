@@ -118,6 +118,9 @@ export default {
       state.room.on('peerLeave', () => {
         const result = state.screens.findIndex((screen) => screen.peerId);
         state.screens.splice(result, 1);
+        roomRef.update({
+          screensnum: 1 + state.screens.length,
+        });
       });
 
       // 自分が退出する時
