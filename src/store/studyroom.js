@@ -39,6 +39,7 @@ export default {
     // テキストチャット
     messages: [],
     // サブタイトル
+    title: '',
     subtitle: '',
     // ダイアログ
     nameDialog: false,
