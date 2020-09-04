@@ -9,7 +9,7 @@
       <v-btn fab text small color="grey darken-2" @click="next">
         <v-icon small>mdi-chevron-right</v-icon>
       </v-btn>
-      <h2>{{ calendar_title }}</h2>
+      <h2 style="margin-left: 30px;">{{ calendar_title }}</h2>
     </div>
 
     <!-- calendar -->
