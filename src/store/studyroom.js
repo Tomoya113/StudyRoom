@@ -24,8 +24,7 @@ const getDefaultState = () => {
     lockDialog: false,
     roomoutDialog: false,
   };
-}
-
+};
 
 export default {
   state: {
@@ -64,7 +63,7 @@ export default {
         debug: 1,
       });
 
-      state.peer.on("error", console.error);
+      state.peer.on('error', console.error);
     },
     joinRoom(state, { roomId, displayName, photoURL }) {
       // ロードが終わってなかったらreturn
@@ -72,106 +71,115 @@ export default {
         return;
       }
 
-      const roomRef = db.collection("rooms").doc(roomId);
+      const roomRef = db.collection('rooms').doc(roomId);
 
       state.isConnected = true;
       // roomに入室
       state.room = state.peer.joinRoom(`studyRoom-${roomId}`, {
-        mode: "sfu",
+        mode: 'sfu',
         stream: state.localStream,
       });
 
       // roomに入った時
-      state.room.once("open", () => {
-        state.logMessage = "You joined this room.\n";
-        state.room.send({ name: displayName, photoURL: photoURL, body: "ルームに入室しました" });
+      state.room.once('open', () => {
+        state.logMessage = 'You joined this room.\n';
+        state.room.send({
+          name: displayName,
+          photoURL: photoURL,
+          body: 'ルームに入室しました',
+        });
+        roomRef.update({
+          screensnum: 1,
+        });
       });
 
       // 他のユーザーが入ってきた時
-      state.room.on("peerJoin", (peerId) => {
-        console.log("peer joined");
-        state.logMessage = state.logMessage + `${peerId} joined` + "\n";
+      state.room.on('peerJoin', (peerId) => {
+        console.log('peer joined');
+        state.logMessage = state.logMessage + `${peerId} joined` + '\n';
       });
 
       // 他の人のビデオ情報を取得した時
-      state.room.on("stream", async (stream) => {
+      state.room.on('stream', async (stream) => {
         await state.screens.push(stream);
+        roomRef.update({
+          screensnum: 1 + state.screens.length,
+        });
       });
 
       // 他の人からデータが送信されてきた時
-      state.room.on("data", ({ data }) => {
+      state.room.on('data', ({ data }) => {
         console.log({ data });
         state.messages.push(data);
         console.log(state.messages);
       });
 
       // 自分以外のメンバーが退出した時の処理
-      state.room.on("peerLeave", () => {
+      state.room.on('peerLeave', () => {
         const result = state.screens.findIndex((screen) => screen.peerId);
         state.screens.splice(result, 1);
       });
 
       // 自分が退出する時
-      state.room.once("close", () => {
-        console.log("disconnected");
+      state.room.once('close', () => {
+        console.log('disconnected');
         // 部屋の参加人数を-1
         roomRef.get().then((doc) => {
-          console.log('before update', doc.data().activeUsers)
+          console.log('before update', doc.data().activeUsers);
           if (doc.data().activeUsers - 1 === 0) {
             roomRef
               .update({
                 activeUsers: doc.data().activeUsers - 1,
-                password: "",
-                subtitle: "",
+                password: '',
+                subtitle: '',
               })
               .then(() => {
-                console.log("after update", doc.data().activeUsers);
+                console.log('after update', doc.data().activeUsers);
                 roomRef.get().then((doc) => {
-                  console.log("get document again", doc.data().activeUsers);
+                  console.log('get document again', doc.data().activeUsers);
                 });
               });
-            } else {
-              roomRef
-                .update({
-                  activeUsers: doc.data().activeUsers - 1
-                })
-            }
-          })
+          } else {
+            roomRef.update({
+              activeUsers: doc.data().activeUsers - 1,
+            });
+          }
         });
+      });
       // 部屋の参加人数を+1
-      roomRef.get().then(doc => {
+      roomRef.get().then((doc) => {
         roomRef.update({
-          activeUsers: doc.data().activeUsers + 1
+          activeUsers: doc.data().activeUsers + 1,
         });
-        state.subtitle = doc.data().subtitle
-        console.log(doc.data().title)
-        state.title = doc.data().title
-        console.log(state.title)
-      })
+        state.subtitle = doc.data().subtitle;
+        console.log(doc.data().title);
+        state.title = doc.data().title;
+        console.log(state.title);
+      });
       // 変更を監視
       roomRef.onSnapshot(function(doc) {
         // console.log("Current data: ", doc && doc.data());
-        state.subtitle = doc.data().subtitle
+        state.subtitle = doc.data().subtitle;
       });
     },
     sendMessage(state, { message }) {
-      console.log("seding message");
+      console.log('seding message');
       state.messages.push(message);
       state.room.send(message);
     },
     setPassword(state, { password, roomId }) {
-      console.log({ password })
-      const roomRef = db.collection("rooms").doc(roomId);
+      console.log({ password });
+      const roomRef = db.collection('rooms').doc(roomId);
       roomRef.update({
-        password: password
-      })
+        password: password,
+      });
     },
     setSubtitle(state, { roomId, subtitle }) {
-      console.log({subtitle}, {roomId})
-      const roomRef = db.collection("rooms").doc(roomId);
+      console.log({ subtitle }, { roomId });
+      const roomRef = db.collection('rooms').doc(roomId);
       roomRef.update({
-        subtitle: subtitle
-      })
+        subtitle: subtitle,
+      });
     },
     recieveMessage(state, { message }) {
       console.log(message);
@@ -198,35 +206,35 @@ export default {
   },
   actions: {
     setup({ commit }) {
-      commit("setup");
+      commit('setup');
     },
     joinRoom({ commit }, { roomId, displayName }) {
-      commit("joinRoom", { roomId, displayName });
+      commit('joinRoom', { roomId, displayName });
     },
     sendMessage({ commit }, { message }) {
-      commit("sendMessage", { message });
+      commit('sendMessage', { message });
     },
     setPassword({ commit }, { password, roomId }) {
-      commit("setPassword", { password, roomId });
+      commit('setPassword', { password, roomId });
     },
     setSubtitle({ commit }, { roomId, subtitle }) {
-      commit("setSubtitle", { roomId, subtitle })
+      commit('setSubtitle', { roomId, subtitle });
     },
     recieveMessage({ commit }, { message }) {
-      commit("recieveMessage", { message });
+      commit('recieveMessage', { message });
     },
     changeNameDialog({ commit }) {
-      commit("changeNameDialog");
+      commit('changeNameDialog');
     },
     changeLockDialog({ commit }) {
-      commit("changeLockDialog");
+      commit('changeLockDialog');
     },
     changeRoomoutDialog({ commit }) {
-      commit("changeRoomoutDialog");
+      commit('changeRoomoutDialog');
     },
     roomout({ commit }) {
-      commit("roomout");
-      router.push({ name: "Studyrooms" });
+      commit('roomout');
+      router.push({ name: 'Studyrooms' });
     },
   },
   getters: {
