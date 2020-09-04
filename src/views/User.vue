@@ -25,7 +25,7 @@
       >
         <template v-slot:day="{ present, past, date }">
           <v-row class="fill-height">
-            <template v-if="past && tracked[date]">
+            <template v-if="(past && tracked[date]) || (present && tracked[date])">
               <v-sheet
                 v-for="(percent, i) in tracked[date]"
                 :key="i"
