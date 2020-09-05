@@ -22,7 +22,7 @@ export default {
       state.currentDisplayName = newName;
     },
     setStudyLog(state, log) {
-      console.log(log);
+      // console.log(log);
       state.studyLog = log;
     },
     addStudyLog(state, log) {
@@ -45,7 +45,7 @@ export default {
               .then( (query) =>  {
                 let bufLog = [];
                 query.forEach((doc) => {
-                  console.log(doc.data());
+                  // console.log(doc.data());
                   bufLog.push(doc.data());
                 });
                 commit('setStudyLog', bufLog);
@@ -101,7 +101,7 @@ export default {
       */
       var today = moment(new Date).format('YYYY-MM-DD')
       var studyLogRef = firebase.firestore().collection('studylog')
-      console.log(bufData);
+      // console.log(bufData);
       studyLogRef.where('userId', '==', this.state.authUserId)
         .where('day', '==', today).get()
         .then( (query) =>  {
@@ -117,7 +117,7 @@ export default {
                   .then( (query) =>  {
                     let bufLog = [];
                     query.forEach((doc) => {
-                      console.log(doc.data());
+                      // console.log(doc.data());
                       bufLog.push(doc.data());
                     });
                     commit('setStudyLog', bufLog);

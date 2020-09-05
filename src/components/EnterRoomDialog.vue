@@ -43,7 +43,7 @@ export default {
   },
   methods: {
     enter () {
-      console.log(this.password, this.roomId)
+      // console.log(this.password, this.roomId)
       this.enterRoom({ password: this.password, roomId: this.roomId });
     },
     ...mapActions(['enterRoom'])
