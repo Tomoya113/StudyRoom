@@ -15,9 +15,15 @@
                 style="padding-bottom:50px;"
               >
                 <v-col class="white--text text-center" cols="12" tag="h1">
-                  <span class="font-weight-light display-1">WELCOME TO</span>
+                  <p
+                    class="font-weight-light display-1"
+                    style="font-size:60px!important;"
+                  >WELCOME TO</p>
                   <br />
-                  <span class="font-weight-black display-3" style="margin:30px;">Study Room</span>
+                  <p
+                    class="font-weight-black display-3"
+                    style="margin-bottom:60px;font-size:120px!important"
+                  >Study Room</p>
                 </v-col>
                 <v-btn
                   tile
@@ -47,7 +53,7 @@
 
         <v-row>
           <v-col v-for="({ icon, title, text }, i) in features" :key="i" cols="12" md="4">
-            <v-card class="py-12 px-4" color="grey lighten-5" flat>
+            <v-card class="py-12 px-4" color="grey lighten-5" flat style="height:100%;">
               <v-theme-provider dark>
                 <div>
                   <v-avatar color="orange darken-2" size="88">
