@@ -26,9 +26,13 @@
 
       <v-container class="text-center">
         <h2 class="display-2 font-weight-bold mb-3">カレンダーについて</h2>
+        <v-responsive class="mx-auto mb-12" width="56">
+          <v-divider class="mb-1"></v-divider>
+
+          <v-divider></v-divider>
+        </v-responsive>
         <v-row>
           <v-col v-for="({ text }, i) in features" :key="i">
-            <v-card-title class="justify-center font-weight-black text-uppercase" v-text="title"></v-card-title>
             <p>まずはこのカレンダー機能について、マスターしていきましょう！</p>
             <p>カレンダーは、右上にある自分のアイコンを押すと表示されます。今日の日付には青い円がついています。自習室の滞在時間に応じて、日付のマスの色が変化します。また、色のついている場所にカーソルを当てると勉強時間(自習室の入室時間)が表示されます。</p>
             <p>このカレンダーはみなさんの勉強時間を管理することが可能です！</p>
@@ -58,7 +62,7 @@
         <v-row>
           <v-col v-for="({ text }, i) in features" :key="i">
             <v-theme-provider dark></v-theme-provider>
-            <v-card-title class="justify-center font-weight-black text-uppercase" v-text="title"></v-card-title>
+
             <p>Study Roomの自習室は6つあります。自分の目標にあったルームに参加してみてください！また、自習室は入室人数が一目でわかります。</p>
             <p>自習室には鍵をかけることが可能です。合言葉を設定から必要に応じてやってみましょう。</p>
             <p>カメラがついていますが、音声はありません。雑談をしない環境で勉強に集中して取り組むことができます。</p>
@@ -128,4 +132,6 @@ export default {
 <style lang="sass">
 body
   margin: 0px
+img
+  margin-top: 40px
 </style>
