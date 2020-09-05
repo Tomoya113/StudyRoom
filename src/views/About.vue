@@ -33,7 +33,7 @@
             <p>カレンダーは、右上にある自分のアイコンを押すと表示されます。今日の日付には青い円がついています。自習室の滞在時間に応じて、日付のマスの色が変化します。また、色のついている場所にカーソルを当てると勉強時間(自習室の入室時間)が表示されます。</p>
             <p>このカレンダーはみなさんの勉強時間を管理することが可能です！</p>
             <p>毎日勉強して、カレンダーに色をたくさんつけましょう！</p>
-            <img height="200vh" v-bind:src="imgPath" />
+            <img height="400vw" v-bind:src="imgPath" />
 
             <v-card-text class="subtitle-1" v-text="text" style="text-align:left;"></v-card-text>
           </v-col>
@@ -63,8 +63,7 @@
             <p>自習室には鍵をかけることが可能です。合言葉を設定から必要に応じてやってみましょう。</p>
             <p>カメラがついていますが、音声はありません。雑談をしない環境で勉強に集中して取り組むことができます。</p>
             <p>チャット機能がついているので質問したいことがあれば聞いてみましょう。</p>
-            <img height="200vh" v-bind:src="imgPath2" />
-            <img height="200vh" v-bind:src="imgPath3" />
+            <!-- <img height="350vw" v-bind:src="imgPath2" /> -->
             <v-card-text class="subtitle-1" v-text="text" style="text-align:left;"></v-card-text>
           </v-col>
         </v-row>
@@ -109,11 +108,10 @@
 // @ is an alias to /src
 import { mapActions } from "vuex";
 export default {
-  data () {
+  data() {
     return {
       imgPath: require("@/assets/calender.png"),
       imgPath2: require("@/assets/chat.png"),
-      imgPath3: require("@/assets/word.png"),
       features: [
         {
           icon: "mdi-calendar-text",
