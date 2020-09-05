@@ -223,7 +223,7 @@ export default {
     join() {
       this.changeNameDialog();
       this.joinTime = moment(new Date());
-      console.log(this.joinTime);
+      // console.log(this.joinTime);
       this.joinRoom({
         roomId: this.$route.params.studyroom_id,
         photoURL: this.photoURL,
@@ -261,9 +261,9 @@ export default {
     },
     // ルームを退出する時の処理
     leave() {
-      console.log('leave');
+      // console.log('leave');
       if (this.joinTime != null) {
-        console.log('in leave');
+        // console.log('in leave');
         let _time = Math.floor(
           moment(new Date()).diff(this.joinTime, 's', false) / 60
         );
