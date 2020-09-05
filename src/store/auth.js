@@ -1,5 +1,4 @@
 import firebase from 'firebase';
-
 export default {
   state: {
     login_user: null,
@@ -24,7 +23,7 @@ export default {
     },
     login() {
       const google_auth_provider = new firebase.auth.GoogleAuthProvider();
-      firebase.auth().signInWithRedirect(google_auth_provider);
+      firebase.auth().signInWithPopup(google_auth_provider);
     },
   },
   getters: {
