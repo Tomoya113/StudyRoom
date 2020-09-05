@@ -26,13 +26,6 @@
 
       <v-container class="text-center">
         <h2 class="display-2 font-weight-bold mb-3">カレンダーについて</h2>
-
-        <v-responsive class="mx-auto mb-12" width="56">
-          <v-divider class="mb-1"></v-divider>
-
-          <v-divider></v-divider>
-        </v-responsive>
-
         <v-row>
           <v-col v-for="({ text }, i) in features" :key="i">
             <v-card-title class="justify-center font-weight-black text-uppercase" v-text="title"></v-card-title>
@@ -116,7 +109,7 @@
 // @ is an alias to /src
 import { mapActions } from "vuex";
 export default {
-  data() {
+  data () {
     return {
       imgPath: require("@/assets/calender.png"),
       imgPath2: require("@/assets/chat.png"),

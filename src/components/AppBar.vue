@@ -61,9 +61,9 @@ export default {
     navigatioToUserPage () {
       this.$router.push({ path: '/user' })
     },
-    onLogout() {
+    onLogout () {
       this.logout()
-      this.$router.push({path: '/'})
+      this.$router.push({ path: '/' })
     },
   },
   computed: {
