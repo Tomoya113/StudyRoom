@@ -130,4 +130,6 @@ export default {
 <style lang="sass">
 body
   margin: 0px
+img
+  margin-top: 15px
 </style>
