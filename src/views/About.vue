@@ -11,7 +11,9 @@
               style="padding-bottom:50px;"
             >
               <v-col class="black--text text-center" cols="12" tag="h1">
-                <span class="font-weight-black display-3" style="margin:30px;">Study Roomの使い方</span>
+                <div style="margin-top: 40px;">
+                  <span class="font-weight-black display-3" style="margin:30px;">Study Roomの使い方</span>
+                </div>
               </v-col>
             </v-row>
           </v-container>

@@ -5,9 +5,9 @@
 
       <v-spacer></v-spacer>
       <div v-if="this.userId">
-        <v-btn :to="{name: 'Home'}" text>ホーム</v-btn>
-        <v-btn :to="{name: 'Studyrooms'}" text>自習室を探す</v-btn>
-        <v-btn :to="{name: 'About'}" text>使い方</v-btn>
+        <v-btn :to="{name: 'Home'}" text class="nav_item">ホーム</v-btn>
+        <v-btn :to="{name: 'Studyrooms'}" text class="nav_item">自習室を探す</v-btn>
+        <v-btn :to="{name: 'About'}" text class="nav_item">使い方</v-btn>
       </div>
 
       <v-menu left bottom offset-y open-on-hover v-if="this.userId">
@@ -71,3 +71,8 @@ export default {
   },
 };
 </script>
+
+<style scoped lang="sass">
+.nav_item
+  margin: 0 5px
+</style>
