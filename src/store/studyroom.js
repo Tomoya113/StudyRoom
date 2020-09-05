@@ -96,7 +96,7 @@ export default {
 
       // 他のユーザーが入ってきた時
       state.room.on('peerJoin', (peerId) => {
-        console.log('peer joined');
+        // console.log('peer joined');
         state.logMessage = state.logMessage + `${peerId} joined` + '\n';
       });
 
@@ -110,9 +110,9 @@ export default {
 
       // 他の人からデータが送信されてきた時
       state.room.on('data', ({ data }) => {
-        console.log({ data });
+        // console.log({ data });
         state.messages.push(data);
-        console.log(state.messages);
+        // console.log(state.messages);
       });
 
       // 自分以外のメンバーが退出した時の処理
@@ -126,13 +126,13 @@ export default {
 
       // 自分が退出する時
       state.room.once('close', () => {
-        console.log('disconnected');
+        // console.log('disconnected');
         roomRef.update({
           screensnum: state.screens.length,
         });
         // 部屋の参加人数を-1
         roomRef.get().then((doc) => {
-          console.log('before update', doc.data().activeUsers);
+          // console.log('before update', doc.data().activeUsers);
           if (doc.data().screensnum === 0) {
             roomRef
               .update({
@@ -140,12 +140,6 @@ export default {
                 password: '',
                 subtitle: '',
               })
-              .then(() => {
-                console.log('after update', doc.data().activeUsers);
-                roomRef.get().then((doc) => {
-                  console.log('get document again', doc.data().activeUsers);
-                });
-              });
           } else {
             roomRef.update({
               activeUsers: doc.data().activeUsers - 1,
@@ -159,9 +153,9 @@ export default {
           activeUsers: doc.data().activeUsers + 1,
         });
         state.subtitle = doc.data().subtitle;
-        console.log(doc.data().title);
+        // console.log(doc.data().title);
         state.title = doc.data().title;
-        console.log(state.title);
+        // console.log(state.title);
       });
       // 変更を監視
       roomRef.onSnapshot(function(doc) {
@@ -170,26 +164,26 @@ export default {
       });
     },
     sendMessage(state, { message }) {
-      console.log('seding message');
+      // console.log('seding message');
       state.messages.push(message);
       state.room.send(message);
     },
     setPassword(state, { password, roomId }) {
-      console.log({ password });
+      // console.log({ password });
       const roomRef = db.collection('rooms').doc(roomId);
       roomRef.update({
         password: password,
       });
     },
     setSubtitle(state, { roomId, subtitle }) {
-      console.log({ subtitle }, { roomId });
+      // console.log({ subtitle }, { roomId });
       const roomRef = db.collection('rooms').doc(roomId);
       roomRef.update({
         subtitle: subtitle,
       });
     },
     recieveMessage(state, { message }) {
-      console.log(message);
+      // console.log(message);
       state.message.push(message);
     },
     changeNameDialog(state) {
@@ -203,12 +197,14 @@ export default {
     },
     roomout(state) {
       state.room.close();
-      const tracks = state.srcObject.getTracks();
-      tracks.forEach((track) => {
-        track.stop();
-      });
+      if (state.srcObject) {
+        const tracks = state.srcObject.getTracks();
+        tracks.forEach((track) => {
+          track.stop();
+        });
+      }
       state = Object.assign(state, getDefaultState());
-      console.log(state);
+      // console.log(state);
     },
   },
   actions: {

@@ -10,7 +10,7 @@ export default {
     setRoomInformation(state) {
       db.collection("rooms").onSnapshot((snapShot) => {
         state.rooms = [];
-        console.log(state.rooms);
+        // console.log(state.rooms);
         snapShot.forEach((doc) => {
           state.rooms.push(doc.data());
         });
@@ -28,7 +28,6 @@ export default {
       // 部屋の参加人数を-1
       roomRef.get().then((doc) => {
         if (doc.data().password === password) {
-          console.log("hoge");
           router.push({ name: "Studyroom", params: { studyroom_id: roomId } });
         } else {
           state.errorMessage = 'パスワードが違います'
